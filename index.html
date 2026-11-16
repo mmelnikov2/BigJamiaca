@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b2340">
 <title>Big Jamaica (redesign prototype)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -176,12 +177,70 @@ footer a:hover{opacity:1;color:#fff}
 .maplink{margin-left:10px;padding:3px 10px;border:1px solid rgba(255,180,138,.6);border-radius:99px;text-decoration:none;letter-spacing:1px;white-space:nowrap}
 .maplink:hover{background:rgba(255,255,255,.12)}
 @media(max-width:700px){#bookFilters{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}#bookFilters .chip{flex:none}.maplink{display:inline-block;margin:6px 0 0}}
+/* ---------- mobile pass ---------- */
+html{-webkit-text-size-adjust:100%}
+a,button{-webkit-tap-highlight-color:rgba(255,106,26,.25);touch-action:manipulation}
+img{max-width:100%}
+.burger{width:48px;height:48px;border-radius:10px}
+@media(max-width:1180px){
+  nav.main{max-height:calc(100vh - 68px);overflow-y:auto;box-shadow:0 14px 24px rgba(0,0,0,.35)}
+  nav.main a{padding:14px 10px;font-size:17px;border-bottom:1px solid rgba(255,255,255,.08)}
+}
+@media(max-width:700px){
+  input,select,textarea{font-size:16px;min-height:48px} /* 16px stops iPhone zoom-on-focus */
+  input[type=checkbox]{min-height:0;width:22px!important;height:22px;flex:none}
+  .btn,.btn-s{min-height:46px;padding:12px 18px;font-size:15px;justify-content:center}
+  .chip{min-height:44px;padding:10px 16px}
+  .proto{font-size:12px;padding:4px 10px}.proto-x{display:none}
+  section{padding:40px 0}
+  .wrap{padding:0 16px}
+  .sec-h h2,h2[style]{font-size:30px!important}
+  .filters{flex-wrap:nowrap;overflow-x:auto;margin:0 -16px 16px;padding:0 16px 6px;scrollbar-width:none}
+  .filters::-webkit-scrollbar{display:none}.filters .chip{flex:none}
+  .card{padding:16px}
+  .sailings{margin-top:-90px}
+  .sail{padding:6px 0;min-height:56px}
+  .trip .foot{flex-wrap:wrap}
+  .trip .foot>div:last-child{display:flex;width:100%}.trip .foot>div:last-child a{flex:1}
+  .hero-band .wrap .cta .btn{flex:1}
+  .facts{gap:14px 22px;display:grid;grid-template-columns:1fr 1fr}
+  /* calendar */
+  .cal-bar{flex-direction:column;align-items:stretch;gap:10px}
+  .cal-nav{justify-content:space-between}.cal-nav h3{flex:1}
+  .cal-arrow{width:48px;height:48px}
+  .cal-bar>div:last-child{display:grid;grid-template-columns:1fr auto auto;gap:6px}
+  #calJump{width:100%!important}
+  .day{min-height:52px;align-items:center;justify-content:center}.day .n{align-self:center;font-size:15px}.dots{justify-content:center}
+  .opt{flex-direction:column;align-items:stretch;gap:12px}
+  .opt>div:last-child{justify-content:space-between!important}
+  .opt .btn{flex:1}
+  .note a,a.note{display:inline-block;padding:6px 0}
+  /* tables become cards */
+  .stack tr{display:block;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:10px}
+  .stack tr:has(th){display:none}
+  .stack td{display:flex;justify-content:space-between;gap:12px;border:0;padding:4px 0;text-align:right}
+  .stack td::before{content:attr(data-l);color:var(--muted);font-size:13px;text-align:left;flex:none}
+  .stack td:first-child{font-size:16px;text-align:left}.stack td:first-child::before{display:none}
+  table:not(.stack) td{padding:10px 6px}
+  summary{min-height:48px;align-items:center;gap:10px}
+  footer a{padding:9px 0}
+  footer{padding-bottom:20px}
+  .mob-cta{padding:10px 10px calc(10px + env(safe-area-inset-bottom))}
+  body{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+  .gal{grid-template-columns:1fr 1fr;gap:8px}.gal figcaption{font-size:12px;padding:8px;flex-direction:column;gap:2px}
+  .lb{padding:10px}
+  .sum{position:static}
+  #p-contact p a{display:inline-block;padding:8px 0}
+}
+@media(max-width:360px){.logo small{display:none}.hero h1{font-size:29px}}
+.only-m{display:none}
+@media(max-width:1180px){nav.main a.only-m{display:block;color:#ffb48a}}
 .page{display:none}.page.on{display:block}
 .hide{display:none!important}
 </style>
 </head>
 <body>
-<div class="proto">Redesign prototype for review. Not the official site. "Reserve" buttons open the current live booking system. Forms here are demos.</div>
+<div class="proto">Redesign prototype<span class="proto-x">. Not the official site. "Reserve" buttons open the current live booking system. Forms here are demos.</span></div>
 
 <header class="top">
   <div class="wrap">
@@ -189,8 +248,9 @@ footer a:hover{opacity:1;color:#fff}
       <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="16" fill="#ff6a1a"/><path d="M6 20c3 0 3-2 5.5-2S14 20 17 20s3-2 5.5-2S25 20 28 20v3c-3 0-3-2-5.5-2S20 23 17 23s-3-2-5.5-2S9 23 6 23z" fill="#fff"/><path d="M10 17l3-7h8l3 7z" fill="#0b2340"/></svg>
       <span>BIG JAMAICA<small>125' PARTY FISHING · BRIELLE NJ</small></span>
     </a>
-    <button class="burger" aria-label="Menu" onclick="document.querySelector('nav.main').classList.toggle('open')">☰</button>
+    <button class="burger" aria-label="Menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded',document.querySelector('nav.main').classList.toggle('open'))">☰</button>
     <nav class="main">
+      <a href="#book" class="only-m">Schedule &amp; Book</a>
       <a href="#trips">Trips &amp; Prices</a>
       <a href="#reports">Fishing Reports</a>
       <a href="#gallery">Gallery</a>
@@ -347,7 +407,7 @@ footer a:hover{opacity:1;color:#fff}
         </form>
       </div>
     </div>
-    <div class="card tbl"><table id="chTable"></table>
+    <div class="card tbl"><table id="chTable" class="stack"></table>
       <p class="note">Rods and tackle included on day charters; tuna rod rental $30 on canyon trips. Bunk fee waived for charters. Weekend charters: $3,500 deposit, balance due 15 days before. Crew gratuity not included (15 to 20% suggested). Prices subject to change.</p></div>
   </div></section>
 </div>
@@ -579,7 +639,7 @@ function renderReports(){
 }
 // ---------- CHARTERS ----------
 function renderCharters(){
-  $("#chTable").innerHTML=`<tr><th>Charter</th><th>When</th><th>Base price</th><th>Includes up to</th><th>Each extra</th></tr>`+CHARTERS.map(c=>`<tr><td><b>${c[0]}</b></td><td>${c[1]}</td><td>${fmt(c[2])}</td><td>${c[3]} people</td><td>${fmt(c[4])}</td></tr>`).join("");
+  $("#chTable").innerHTML=`<tr><th>Charter</th><th>When</th><th>Base price</th><th>Includes up to</th><th>Each extra</th></tr>`+CHARTERS.map(c=>`<tr><td><b>${c[0]}</b></td><td data-l="When">${c[1]}</td><td data-l="Base price">${fmt(c[2])}</td><td data-l="Includes up to">${c[3]} people</td><td data-l="Each extra">${fmt(c[4])}</td></tr>`).join("");
   $("#chType").innerHTML=CHARTERS.map((c,i)=>`<option value="${i}">${c[0]}</option>`).join("");
   const calc=()=>{const c=CHARTERS[$("#chType").value],n=+$("#chSize").value||0,ex=Math.max(0,n-c[3]),base=c[2]+ex*c[4],tip=Math.round(base*.18);
    $("#chOut").innerHTML=`<div class="line" style="display:flex;justify-content:space-between"><span>Base (up to ${c[3]})</span><b>${fmt(c[2])}</b></div>${ex?`<div style="display:flex;justify-content:space-between"><span>${ex} extra × ${fmt(c[4])}</span><b>${fmt(ex*c[4])}</b></div>`:''}

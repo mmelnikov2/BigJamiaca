@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Big Jamaica Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -40,6 +40,27 @@ td input,td select{padding:6px 8px;font-size:14px}
 .thumbs figcaption{padding:8px;font-size:13px}
 .drop{border:2px dashed var(--line);border-radius:12px;padding:26px;text-align:center;cursor:pointer}
 .drop:hover{border-color:var(--orange)}
+@media(max-width:700px){
+  main{padding:12px}
+  .card{padding:14px}
+  input,select,textarea,td input,td select{font-size:16px;min-height:46px}
+  input[type=checkbox]{min-height:0;width:22px!important;height:22px}
+  .btn,.btn.s{min-height:46px;padding:12px 16px;font-size:15px}
+  .tabs{padding:8px 10px;position:sticky;top:60px;z-index:4}.tabs button{min-height:46px}
+  header a{padding:14px 0}
+  .row{grid-template-columns:1fr 1fr}
+  .stack tr{display:block;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:10px}
+  .stack tr:has(th){display:none}
+  .stack td{display:flex;align-items:center;justify-content:space-between;gap:12px;border:0;padding:5px 0;width:auto!important}
+  .stack td::before{content:attr(data-l);color:var(--muted);font-size:13px;flex:none;width:92px}
+  .stack td>input,.stack td>select{flex:1;min-width:0}
+  .stack td.t{font-weight:700;font-size:16px}.stack td.t::before,.stack td.a::before{display:none}
+  .stack td.a{justify-content:flex-end;gap:8px}
+  .stack td.pr{display:block}.stack td.pr::before{display:block;margin-bottom:4px}
+  .thumbs{grid-template-columns:1fr 1fr}
+  .toast{bottom:calc(16px + env(safe-area-inset-bottom));width:max-content;max-width:90vw}
+  #login{margin:30px 12px}
+}
 .hide{display:none!important}
 #login{max-width:380px;margin:80px auto}
 .warn{background:#fff4e5;border-left:4px solid #b54708;padding:10px 14px;border-radius:8px;font-size:13px;color:#5a3300;margin-bottom:16px}
@@ -78,8 +99,9 @@ td input,td select{padding:6px 8px;font-size:14px}
     </div>
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><h2 style="margin:0">Schedule</h2>
+        <select id="schedMonth" onchange="rSched()" style="width:auto;flex:1;max-width:240px" aria-label="Month"></select>
         <label style="display:flex;gap:6px;align-items:center;margin:0"><input type="checkbox" id="showPast" style="width:auto" onchange="rSched()"> Show past</label></div>
-      <div class="tbl"><table id="schedTbl"></table></div>
+      <div class="tbl"><table id="schedTbl" class="stack"></table></div>
       <p class="note">Tip: set <b>Cancelled</b> for weather. The site shows it right away. Seat counts here are what the site shows; once the booking system shares live counts this updates itself.</p>
     </div>
   </section>
@@ -95,7 +117,7 @@ td input,td select{padding:6px 8px;font-size:14px}
       <label>Photo (optional)</label><input id="rImg" type="file" accept="image/*">
       <div style="display:flex;gap:8px;margin-top:12px"><button class="btn" onclick="saveReport()">Publish report</button><button class="btn g hide" id="rCancel" onclick="resetReport()">Cancel edit</button></div>
     </div>
-    <div class="card"><h2>Published</h2><div class="tbl"><table id="repTbl"></table></div></div>
+    <div class="card"><h2>Published</h2><div class="tbl"><table id="repTbl" class="stack"></table></div></div>
   </section>
 
   <!-- PHOTOS -->
@@ -114,7 +136,7 @@ td input,td select{padding:6px 8px;font-size:14px}
     <div class="card">
       <h2>Trips &amp; prices</h2>
       <p class="note">Change a price and save. Booking page prices must also be updated in the booking system until the two are connected.</p>
-      <div class="tbl"><table id="tripTbl"></table></div>
+      <div class="tbl"><table id="tripTbl" class="stack"></table></div>
       <button class="btn" style="margin-top:12px" onclick="saveTrips()">Save prices</button>
     </div>
   </section>
@@ -174,14 +196,17 @@ function addSailings(){
 }
 function rSched(){
   const past=$("#showPast").checked;
-  const rows=C.sailings.map((s,i)=>({...s,i})).filter(s=>past||s.d>=today()).sort((a,b)=>a.d.localeCompare(b.d));
-  $("#schedTbl").innerHTML=`<tr><th>Date</th><th>Trip</th><th>Seats open</th><th>Status</th><th>Note</th><th></th></tr>`+rows.map(s=>`<tr>
-    <td><input type="date" value="${s.d}" onchange="upd(${s.i},'d',this.value)"></td>
-    <td>${esc(trip(s.t)?.name||s.t)}</td>
-    <td style="width:100px"><input type="number" min="0" value="${s.left}" onchange="upd(${s.i},'left',+this.value)"></td>
-    <td><select onchange="upd(${s.i},'status',this.value)">${[["open","Open"],["soldout","Sold out"],["cancelled","Cancelled"]].map(([v,l])=>`<option value="${v}" ${(s.status||"open")===v?"selected":""}>${l}</option>`).join("")}</select></td>
-    <td><input value="${esc(s.note||"")}" onchange="upd(${s.i},'note',this.value)"></td>
-    <td><button class="btn r s" onclick="if(confirm('Delete this sailing?')){C.sailings.splice(${s.i},1);save('Deleted');rSched()}">Delete</button></td></tr>`).join("")
+  const all=C.sailings.map((s,i)=>({...s,i})).filter(s=>past||s.d>=today()).sort((a,b)=>a.d.localeCompare(b.d));
+  const months=[...new Set(all.map(s=>s.d.slice(0,7)))], sel=$("#schedMonth"), cur=months.includes(sel.value)?sel.value:(months[0]||"");
+  sel.innerHTML=months.map(m=>`<option value="${m}" ${m===cur?"selected":""}>${new Date(m+"-15").toLocaleString("en-US",{month:"long",year:"numeric"})} (${all.filter(s=>s.d.startsWith(m)).length})</option>`).join("");
+  const rows=all.filter(s=>s.d.startsWith(cur));
+  $("#schedTbl").innerHTML=`<tr><th>Trip</th><th>Date</th><th>Seats open</th><th>Status</th><th>Note</th><th></th></tr>`+rows.map(s=>`<tr>
+    <td class="t" style="order:-1">${esc(trip(s.t)?.name||s.t)}</td>
+    <td data-l="Date"><input type="date" value="${s.d}" onchange="upd(${s.i},'d',this.value)"></td>
+    <td data-l="Seats open" style="width:100px"><input type="number" inputmode="numeric" min="0" value="${s.left}" onchange="upd(${s.i},'left',+this.value)"></td>
+    <td data-l="Status"><select onchange="upd(${s.i},'status',this.value)">${[["open","Open"],["soldout","Sold out"],["cancelled","Cancelled"]].map(([v,l])=>`<option value="${v}" ${(s.status||"open")===v?"selected":""}>${l}</option>`).join("")}</select></td>
+    <td data-l="Note"><input value="${esc(s.note||"")}" onchange="upd(${s.i},'note',this.value)"></td>
+    <td class="a"><button class="btn r s" onclick="if(confirm('Delete this sailing?')){C.sailings.splice(${s.i},1);save('Deleted');rSched()}">Delete</button></td></tr>`).join("")
     +(rows.length?"":`<tr><td colspan="6" class="note">No upcoming sailings.</td></tr>`);
 }
 function upd(i,k,v){C.sailings[i][k]=v;save();if(k==="d")rSched()}
@@ -201,8 +226,8 @@ function editReport(i){const r=C.reports[i];editing=i;$("#rHead").textContent="E
 function resetReport(){editing=null;$("#rHead").textContent="New fishing report";["rTitle","rText","rHigh","rPool","rTag"].forEach(id=>$("#"+id).value="");$("#rImg").value="";$("#rDate").value=today();$("#rCancel").classList.add("hide")}
 function rReports(){
   $("#tags").innerHTML=[...new Set(C.reports.map(r=>r.tag))].map(t=>`<option value="${esc(t)}">`).join("");
-  $("#repTbl").innerHTML=`<tr><th>Date</th><th>Title</th><th>Tag</th><th>Photo</th><th></th></tr>`+C.reports.map((r,i)=>({...r,i})).sort((a,b)=>b.d.localeCompare(a.d)).map(r=>`<tr><td>${r.d}</td><td>${esc(r.t)}</td><td>${esc(r.tag)}</td><td>${r.img?"✓":""}</td>
-   <td style="white-space:nowrap"><button class="btn g s" onclick="editReport(${r.i})">Edit</button> <button class="btn r s" onclick="if(confirm('Delete this report?')){C.reports.splice(${r.i},1);save('Deleted');rReports()}">Delete</button></td></tr>`).join("");
+  $("#repTbl").innerHTML=`<tr><th>Title</th><th>Date</th><th>Tag</th><th>Photo</th><th></th></tr>`+C.reports.map((r,i)=>({...r,i})).sort((a,b)=>b.d.localeCompare(a.d)).map(r=>`<tr><td class="t">${esc(r.t)}</td><td data-l="Date">${r.d}</td><td data-l="Tag">${esc(r.tag)}</td><td data-l="Photo">${r.img?"✓":"none"}</td>
+   <td class="a" style="white-space:nowrap"><button class="btn g s" onclick="editReport(${r.i})">Edit</button> <button class="btn r s" onclick="if(confirm('Delete this report?')){C.reports.splice(${r.i},1);save('Deleted');rReports()}">Delete</button></td></tr>`).join("");
 }
 // ---- photos
 async function addPhotos(files){
@@ -218,11 +243,11 @@ function rPhotos(){
 // ---- trips
 function rTrips(){
   $("#tripTbl").innerHTML=`<tr><th>Trip</th><th>Time</th><th>Prices</th><th>Rod</th><th>Bunk</th></tr>`+C.trips.map((t,i)=>`<tr>
-   <td><input value="${esc(t.name)}" data-i="${i}" data-k="name"></td>
-   <td><input value="${esc(t.time)}" data-i="${i}" data-k="time"></td>
-   <td>${Object.entries(t.prices).map(([k,v])=>`<div style="display:flex;gap:6px;align-items:center;margin:2px 0"><span class="note" style="width:110px">${esc(k)}</span><input type="number" value="${v}" data-i="${i}" data-p="${esc(k)}" style="width:90px"></div>`).join("")}</td>
-   <td style="width:80px"><input type="number" value="${t.rod}" data-i="${i}" data-k="rod"></td>
-   <td style="width:80px"><input type="number" value="${t.bunk}" data-i="${i}" data-k="bunk"></td></tr>`).join("");
+   <td data-l="Name"><input value="${esc(t.name)}" data-i="${i}" data-k="name"></td>
+   <td data-l="Time"><input value="${esc(t.time)}" data-i="${i}" data-k="time"></td>
+   <td class="pr" data-l="Prices">${Object.entries(t.prices).map(([k,v])=>`<div style="display:flex;gap:6px;align-items:center;margin:2px 0"><span class="note" style="width:110px">${esc(k)}</span><input type="number" value="${v}" data-i="${i}" data-p="${esc(k)}" style="width:90px"></div>`).join("")}</td>
+   <td data-l="Rod rental" style="width:80px"><input type="number" inputmode="numeric" value="${t.rod}" data-i="${i}" data-k="rod"></td>
+   <td data-l="Bunk" style="width:80px"><input type="number" inputmode="numeric" value="${t.bunk}" data-i="${i}" data-k="bunk"></td></tr>`).join("");
 }
 function saveTrips(){
   document.querySelectorAll("#tripTbl input").forEach(el=>{const t=C.trips[el.dataset.i];
