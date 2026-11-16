@@ -240,7 +240,7 @@ img{max-width:100%}
 </style>
 </head>
 <body>
-<div class="proto">Redesign prototype<span class="proto-x">. Not the official site. "Reserve" buttons open the current live booking system. Forms here are demos.</span></div>
+<div class="proto" id="proto">Redesign prototype<span class="proto-x">. Not the official site. "Reserve" buttons open the current live booking system. Forms here are demos.</span></div>
 
 <header class="top">
   <div class="wrap">
@@ -509,7 +509,11 @@ img{max-width:100%}
 const D=JSON.parse(JSON.stringify(window.DEFAULT_CONTENT));
 let TRIPS=D.trips,SAILINGS=D.sailings,REPORTS=D.reports,CHARTERS=D.charters,PHOTOS=D.photos;
 // Content saved from admin.html (prototype: browser storage; production: CMS/API)
-try{const c=JSON.parse(localStorage.getItem("bj_content")||"null");if(c){if(c.trips)TRIPS=c.trips;if(c.sailings)SAILINGS=c.sailings;if(c.reports)REPORTS=c.reports;if(c.photos)PHOTOS=c.photos;if(c.charters)CHARTERS=c.charters;}}catch(e){}
+function applyContent(c){if(!c)return;if(c.trips)TRIPS=c.trips;if(c.sailings)SAILINGS=c.sailings;if(c.reports)REPORTS=c.reports;if(c.photos)PHOTOS=c.photos;if(c.charters)CHARTERS=c.charters}
+// Local preview only: the prototype admin saves to this browser. On the hosted site content.json is the truth.
+const LOCAL_PREVIEW=["localhost","127.0.0.1",""].includes(location.hostname);
+function localOverride(){if(!LOCAL_PREVIEW)return;try{applyContent(JSON.parse(localStorage.getItem("bj_content")||"null"))}catch(e){}}
+localOverride();
 const $=s=>document.querySelector(s), fmt=n=>"$"+n.toLocaleString();
 const byId=id=>TRIPS.find(t=>t.id===id);
 const fromPrice=t=>Math.min(...Object.values(t.prices));
@@ -665,6 +669,8 @@ function route(){
   window.scrollTo(0,0);
 }
 renderHome(); window.onhashchange=route; route();
+// Published content (what the admin page saves on the hosted site)
+fetch("content.json",{cache:"no-cache"}).then(r=>r.ok?r.json():null).then(c=>{if(!c)return;applyContent(c);localOverride();renderHome();route()}).catch(()=>{});
 </script>
 </body>
 </html>

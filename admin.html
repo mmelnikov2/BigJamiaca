@@ -61,26 +61,31 @@ td input,td select{padding:6px 8px;font-size:14px}
   .toast{bottom:calc(16px + env(safe-area-inset-bottom));width:max-content;max-width:90vw}
   #login{margin:30px 12px}
 }
+.pub{position:sticky;top:124px;z-index:3;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--navy);color:#fff;padding:12px 16px;border-radius:12px;margin-bottom:16px;box-shadow:0 6px 18px rgba(0,0,0,.25)}
 .hide{display:none!important}
 #login{max-width:380px;margin:80px auto}
 .warn{background:#fff4e5;border-left:4px solid #b54708;padding:10px 14px;border-radius:8px;font-size:13px;color:#5a3300;margin-bottom:16px}
 </style>
 </head>
 <body>
-<header><b>BIG JAMAICA · Admin</b><a href="index.html" target="_blank">View site ↗</a></header>
+<header><b>BIG JAMAICA · Admin</b><a href="index.html" target="_blank">View site ↗</a><a href="#" style="margin-left:0" onclick="if(SERVER){if(!dirty||confirm('Log out without publishing your changes?')){dirty=false;logout()}}else{try{sessionStorage.removeItem('bj_admin')}catch(e){}location.reload()}return false">Log out</a></header>
 
 <div id="login" class="card">
   <h2>Staff login</h2>
-  <p class="note">Prototype gate. Any password works for the demo: real accounts come with hosting.</p>
-  <label>Email</label><input id="em" type="email" value="staff@example.com">
-  <label>Password</label><input id="pw" type="password" value="demo">
-  <button class="btn" style="margin-top:14px;width:100%" onclick="login()">Log in</button>
+  <p class="note" id="loginNote">Checking…</p>
+  <form onsubmit="event.preventDefault();login()">
+  <label for="em">Name</label><input id="em" autocomplete="username" autocapitalize="none" required>
+  <label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password" required>
+  <p id="loginErr" style="color:var(--red);font-weight:600;margin:10px 0 0" class="hide"></p>
+  <button class="btn" style="margin-top:14px;width:100%">Log in</button>
+  </form>
 </div>
 
 <div id="app" class="hide">
 <nav class="tabs" id="tabs"></nav>
 <main>
-  <div class="warn">Prototype: changes save to <b>this browser only</b> and show up on the site in this browser. In production they save to the server for everyone. Use <b>Backup</b> to move changes between computers.</div>
+  <div class="warn" id="modeNote">Preview mode: changes save to <b>this browser only</b>. On the hosted site they publish for everyone.</div>
+  <div id="pubBar" class="pub hide"><span id="pubMsg">You have unpublished changes.</span><button class="btn" id="pubBtn" onclick="publish()">Publish changes</button></div>
 
   <!-- SCHEDULE -->
   <section data-tab="schedule">
@@ -148,7 +153,7 @@ td input,td select{padding:6px 8px;font-size:14px}
       <p>Download everything (schedule, reports, photos, prices) as one file, or load a file saved from another computer.</p>
       <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="exportJson()">Download backup</button>
       <label class="btn g" style="margin:0">Load backup<input type="file" accept=".json" class="hide" onchange="importJson(this.files[0])"></label>
-      <button class="btn r" onclick="if(confirm('Reset all content back to the defaults?')){localStorage.removeItem(KEY);location.reload()}">Reset to defaults</button></div>
+      <button class="btn r" id="resetBtn" onclick="if(confirm('Reset all content back to the defaults?')){localStorage.removeItem(KEY);location.reload()}">Reset to defaults</button></div>
       <p class="note" id="usage"></p>
     </div>
   </section>
@@ -160,20 +165,61 @@ td input,td select{padding:6px 8px;font-size:14px}
 <script>
 const KEY="bj_content";
 let C;
-try{C=JSON.parse(localStorage.getItem(KEY)||"null")}catch(e){}
-C=Object.assign(JSON.parse(JSON.stringify(DEFAULT_CONTENT)),C||{});
+C=JSON.parse(JSON.stringify(DEFAULT_CONTENT));
 const $=s=>document.querySelector(s), fmt=n=>"$"+Number(n).toLocaleString(), esc=x=>String(x??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const today=()=>new Date().toISOString().slice(0,10);
+const today=()=>{const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
 const trip=id=>C.trips.find(t=>t.id===id);
+// Two modes. SERVER: hosted site, real logins, Publish commits content to the repo.
+// LOCAL: preview on a PC, no logins, saves to this browser only.
+const API="/api/admin"; let SERVER=false, TOKEN=null, dirty=false;
+try{TOKEN=sessionStorage.getItem("bj_token")}catch(e){}
 function save(msg){
+  if(SERVER){dirty=true;$("#pubBar").classList.remove("hide");$("#pubMsg").textContent="You have unpublished changes.";toast(msg?msg+". Not published yet":"Changed. Not published yet");return}
   try{localStorage.setItem(KEY,JSON.stringify(C));toast(msg||"Saved. Live on the site.")}
   catch(e){toast("Storage full: remove some photos or download a backup",true)}
   usage();
 }
-function toast(m,bad){const t=$("#toast");t.textContent=m;t.style.background=bad?"var(--red)":"var(--ok)";t.classList.add("on");setTimeout(()=>t.classList.remove("on"),2200)}
-function usage(){try{const kb=Math.round((localStorage.getItem(KEY)||"").length/1024);$("#usage").textContent=`Using ${kb} KB of about 5,000 KB browser storage (prototype limit).`}catch(e){}}
-function login(){$("#login").classList.add("hide");$("#app").classList.remove("hide");try{sessionStorage.setItem("bj_admin","1")}catch(e){}init()}
-try{if(sessionStorage.getItem("bj_admin"))login()}catch(e){}
+async function publish(){
+  const btn=$("#pubBtn");btn.disabled=true;btn.textContent="Publishing…";
+  try{
+    const r=await fetch(API,{method:"POST",headers:{"content-type":"application/json",authorization:"Bearer "+TOKEN},body:JSON.stringify({action:"save",content:C})});
+    const j=await r.json();
+    if(r.status===401){logout("Your login expired. Log in and press Publish again.");return}
+    if(!r.ok)throw new Error(j.error||"Save failed");
+    C=j.content;dirty=false;$("#pubBar").classList.add("hide");rPhotos();rReports();
+    toast(j.unchanged?"Nothing new to publish":"Published. Live on the site in about a minute.");
+  }catch(e){toast(String(e.message||e),true)}
+  finally{btn.disabled=false;btn.textContent="Publish changes"}
+}
+window.addEventListener("beforeunload",e=>{if(dirty){e.preventDefault();e.returnValue=""}});
+function toast(m,bad){const t=$("#toast");t.textContent=m;t.style.background=bad?"var(--red)":"var(--ok)";t.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("on"),bad?5000:2600)}
+function usage(){if(SERVER){$("#usage").textContent="";return}try{const kb=Math.round((localStorage.getItem(KEY)||"").length/1024);$("#usage").textContent=`Using ${kb} KB of about 5,000 KB browser storage (preview limit).`}catch(e){}}
+function showApp(){$("#login").classList.add("hide");$("#app").classList.remove("hide");init()}
+function logout(msg){TOKEN=null;try{sessionStorage.removeItem("bj_token")}catch(e){}$("#app").classList.add("hide");$("#login").classList.remove("hide");if(msg){$("#loginErr").textContent=msg;$("#loginErr").classList.remove("hide")}}
+async function login(){
+  if(!SERVER){try{sessionStorage.setItem("bj_admin","1")}catch(e){}showApp();return}
+  $("#loginErr").classList.add("hide");
+  try{
+    const r=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"login",user:$("#em").value,password:$("#pw").value})});
+    const j=await r.json(); if(!r.ok)throw new Error(j.error||"Login failed");
+    TOKEN=j.token;try{sessionStorage.setItem("bj_token",TOKEN)}catch(e){}$("#pw").value="";showApp();
+  }catch(e){$("#loginErr").textContent=String(e.message||e);$("#loginErr").classList.remove("hide")}
+}
+(async function boot(){
+  try{const r=await fetch(API);const j=r.ok&&(r.headers.get("content-type")||"").includes("json")?await r.json():null;SERVER=!!(j&&j.ok);
+    if(SERVER&&!j.configured)$("#loginErr").textContent="Admin isn't set up yet: add ADMIN_USERS and GITHUB_TOKEN in Netlify (see DEPLOY.md).",$("#loginErr").classList.remove("hide")}catch(e){}
+  try{const r=await fetch("content.json",{cache:"no-store"});if(r.ok)Object.assign(C,await r.json())}catch(e){}
+  if(SERVER){
+    $("#loginNote").textContent="Staff only. Use the name and password the owner gave you.";
+    $("#modeNote").classList.add("hide");
+    if(TOKEN)showApp();
+  }else{
+    try{Object.assign(C,JSON.parse(localStorage.getItem(KEY)||"null")||{})}catch(e){}
+    $("#loginNote").textContent="Preview mode on this computer: any name and password work.";
+    $("#em").value="demo";$("#pw").value="demo";
+    try{if(sessionStorage.getItem("bj_admin"))showApp()}catch(e){}
+  }
+})();
 
 const TABS=[["schedule","📅 Schedule"],["reports","📝 Fishing reports"],["photos","📷 Photos"],["trips","💲 Trips & prices"],["backup","💾 Backup"]];
 function tab(k){document.querySelectorAll("[data-tab]").forEach(s=>s.classList.toggle("hide",s.dataset.tab!==k));document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.k===k));try{localStorage.setItem("bj_tab",k)}catch(e){}}
@@ -183,6 +229,7 @@ function init(){
   $("#sTrip").innerHTML=C.trips.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join("");
   $("#sDate").value=today(); $("#rDate").value=today();
   rSched();rReports();rPhotos();rTrips();usage();
+  if(SERVER)$("#resetBtn").classList.add("hide");
 }
 // ---- schedule
 function addSailings(){

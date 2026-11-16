@@ -34,7 +34,7 @@ To preview, open `index.html` in a browser. Open `admin.html`, log in with any p
 5. **Their styling hooks** (optional): let us restyle the booking pages so the hand-off doesn't look like a different site.
 
 ## Holes to close before launch
-- **Admin is a prototype.** It saves to one browser. Production needs a real backend: a headless CMS (e.g. Decap CMS on Netlify, free and git-based) or a small database (e.g. Supabase). It also needs real staff logins.
+- **Admin saving** is built for Netlify (see `DEPLOY.md`): staff logins, and Publish commits content into the repo. It still needs the one-time Netlify setup and a live test.
 - **Card security on gift certificates.** The current order form appears to collect card details directly on the page. Confirm it's PCI compliant, or move to a hosted checkout (Stripe, Square).
 - **Content rights.** Owner is on board, but get written OK to reuse their text and photos, and get the original photo files.
 - **Domain and hosting.** Someone with access to the domain registrar must point `www` at the new host.
