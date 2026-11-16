@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b2340">
 <title>Big Jamaica (redesign prototype)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -47,11 +48,27 @@ nav.main a:hover,nav.main a.on{background:rgba(255,255,255,.1);opacity:1}
   .top .btn-o{display:none}
 }
 /* hero */
-.hero{position:relative;color:#fff;background:linear-gradient(180deg,#0b2340 0%,#12345c 55%,#1f6f8b 100%);overflow:hidden}
-.hero .wrap{position:relative;z-index:2;padding:80px 20px 150px}
-.hero h1{font-size:clamp(38px,6vw,72px);font-weight:900;max-width:820px}
+.hero{position:relative;color:#fff;min-height:clamp(500px,46vw,660px);background:
+  linear-gradient(105deg,rgba(8,22,39,.82) 0%,rgba(8,22,39,.45) 28%,rgba(8,22,39,0) 48%),
+  linear-gradient(180deg,rgba(8,22,39,.35) 0%,rgba(8,22,39,0) 30%,rgba(8,22,39,0) 78%,#0b2340 100%),
+  url("images/hero-boat.jpg") center 10%/cover no-repeat,#0b2340}
+.hero .wrap{position:relative;z-index:2;padding:48px 20px 40px}
+.hero h1{font-size:clamp(32px,3.7vw,54px);font-weight:900;max-width:540px;text-shadow:0 2px 18px rgba(0,0,0,.35);margin-bottom:.35em}
+.hero .btn-g{background:rgba(8,22,39,.35);backdrop-filter:blur(4px)}
+.hero-band{background:#0b2340;color:#fff;padding:8px 0 120px}
+.hero-band .lead{font-size:19px;max-width:720px;opacity:.92;margin:0}
+.hero-band .facts{margin-top:22px}
+.hero-band .wrap .cta{display:none}
+@media(max-width:700px){
+  .hero{min-height:600px;background:
+    linear-gradient(180deg,#0b2340 0%,#0b2340 18%,rgba(11,35,64,.75) 40%,rgba(11,35,64,0) 54%,rgba(11,35,64,0) 88%,#0b2340 100%),
+    url("images/hero-boat.jpg") 28% 100%/200% auto no-repeat,#0b2340}
+  .hero .wrap{padding-top:30px}
+  .hero .wrap .cta{display:none}
+  .hero-band .wrap .cta{display:flex;margin:0 0 20px}
+}
 .hero h1 span{color:var(--orange)}
-.hero p.lead{font-size:20px;max-width:640px;opacity:.92}
+
 .hero .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
 .facts{display:flex;gap:28px;flex-wrap:wrap;margin-top:40px;font-size:14px;opacity:.9}
 .facts b{display:block;font:800 26px Archivo}
@@ -139,12 +156,91 @@ footer a:hover{opacity:1;color:#fff}
 .gal figcaption{padding:10px 12px;font-size:14px;display:flex;justify-content:space-between;gap:8px}.gal figcaption span{color:var(--muted)}
 .lb{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;color:#fff}
 .lb img{max-width:100%;max-height:80vh;border-radius:8px}
+.cal-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:6px 0 12px}
+.cal-nav{display:flex;align-items:center;gap:10px}.cal-nav h3{margin:0;min-width:190px;text-align:center;font-size:24px}
+.cal-arrow{width:42px;height:42px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:24px;cursor:pointer}
+.cal-arrow:disabled{opacity:.3;cursor:default}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal .dow{font:700 12px Archivo;letter-spacing:1px;text-transform:uppercase;color:var(--muted);text-align:center;padding:4px 0}
+.day{min-height:96px;border:1px solid var(--line);border-radius:10px;background:var(--card);padding:6px;text-align:left;font:inherit;color:inherit;display:flex;flex-direction:column;gap:3px;cursor:default}
+.day.has{cursor:pointer}.day.has:hover{border-color:var(--orange)}
+.day.sel{box-shadow:0 0 0 2px var(--orange) inset;border-color:var(--orange)}
+.day.past,.day.blank{opacity:.35;background:transparent}.day.blank{border:0}
+.day.today .n{background:var(--navy);color:#fff;border-radius:99px;padding:0 7px}
+.day .n{font-weight:700;font-size:14px;align-self:flex-start}
+.ev{font-size:11.5px;line-height:1.25;padding:2px 6px;border-radius:5px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev.x{background:#999!important;text-decoration:line-through}
+.more{font-size:11px;color:var(--muted)}
+.dots{display:none;gap:3px;flex-wrap:wrap}.dots i{width:7px;height:7px;border-radius:9px;display:block}
+@media(max-width:700px){.day{min-height:54px;padding:4px}.ev,.more{display:none}.dots{display:flex}.cal{gap:3px}.cal-nav h3{min-width:150px;font-size:19px}}
+#dayPanel h3{margin:22px 0 10px}
+.maplink{margin-left:10px;padding:3px 10px;border:1px solid rgba(255,180,138,.6);border-radius:99px;text-decoration:none;letter-spacing:1px;white-space:nowrap}
+.maplink:hover{background:rgba(255,255,255,.12)}
+@media(max-width:700px){#bookFilters{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}#bookFilters .chip{flex:none}.maplink{display:inline-block;margin:6px 0 0}}
+/* ---------- mobile pass ---------- */
+html{-webkit-text-size-adjust:100%}
+a,button{-webkit-tap-highlight-color:rgba(255,106,26,.25);touch-action:manipulation}
+img{max-width:100%}
+.burger{width:48px;height:48px;border-radius:10px}
+@media(max-width:1180px){
+  nav.main{max-height:calc(100vh - 68px);overflow-y:auto;box-shadow:0 14px 24px rgba(0,0,0,.35)}
+  nav.main a{padding:14px 10px;font-size:17px;border-bottom:1px solid rgba(255,255,255,.08)}
+}
+@media(max-width:700px){
+  input,select,textarea{font-size:16px;min-height:48px} /* 16px stops iPhone zoom-on-focus */
+  input[type=checkbox]{min-height:0;width:22px!important;height:22px;flex:none}
+  .btn,.btn-s{min-height:46px;padding:12px 18px;font-size:15px;justify-content:center}
+  .chip{min-height:44px;padding:10px 16px}
+  .proto{font-size:12px;padding:4px 10px}.proto-x{display:none}
+  section{padding:40px 0}
+  .wrap{padding:0 16px}
+  .sec-h h2,h2[style]{font-size:30px!important}
+  .filters{flex-wrap:nowrap;overflow-x:auto;margin:0 -16px 16px;padding:0 16px 6px;scrollbar-width:none}
+  .filters::-webkit-scrollbar{display:none}.filters .chip{flex:none}
+  .card{padding:16px}
+  .sailings{margin-top:-90px}
+  .sail{padding:6px 0;min-height:56px}
+  .trip .foot{flex-wrap:wrap}
+  .trip .foot>div:last-child{display:flex;width:100%}.trip .foot>div:last-child a{flex:1}
+  .hero-band .wrap .cta .btn{flex:1}
+  .facts{gap:14px 22px;display:grid;grid-template-columns:1fr 1fr}
+  /* calendar */
+  .cal-bar{flex-direction:column;align-items:stretch;gap:10px}
+  .cal-nav{justify-content:space-between}.cal-nav h3{flex:1}
+  .cal-arrow{width:48px;height:48px}
+  .cal-bar>div:last-child{display:grid;grid-template-columns:1fr auto auto;gap:6px}
+  #calJump{width:100%!important}
+  .day{min-height:52px;align-items:center;justify-content:center}.day .n{align-self:center;font-size:15px}.dots{justify-content:center}
+  .opt{flex-direction:column;align-items:stretch;gap:12px}
+  .opt>div:last-child{justify-content:space-between!important}
+  .opt .btn{flex:1}
+  .note a,a.note{display:inline-block;padding:6px 0}
+  /* tables become cards */
+  .stack tr{display:block;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:10px}
+  .stack tr:has(th){display:none}
+  .stack td{display:flex;justify-content:space-between;gap:12px;border:0;padding:4px 0;text-align:right}
+  .stack td::before{content:attr(data-l);color:var(--muted);font-size:13px;text-align:left;flex:none}
+  .stack td:first-child{font-size:16px;text-align:left}.stack td:first-child::before{display:none}
+  table:not(.stack) td{padding:10px 6px}
+  summary{min-height:48px;align-items:center;gap:10px}
+  footer a{padding:9px 0}
+  footer{padding-bottom:20px}
+  .mob-cta{padding:10px 10px calc(10px + env(safe-area-inset-bottom))}
+  body{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+  .gal{grid-template-columns:1fr 1fr;gap:8px}.gal figcaption{font-size:12px;padding:8px;flex-direction:column;gap:2px}
+  .lb{padding:10px}
+  .sum{position:static}
+  #p-contact p a{display:inline-block;padding:8px 0}
+}
+@media(max-width:360px){.logo small{display:none}.hero h1{font-size:29px}}
+.only-m{display:none}
+@media(max-width:1180px){nav.main a.only-m{display:block;color:#ffb48a}}
 .page{display:none}.page.on{display:block}
 .hide{display:none!important}
 </style>
 </head>
 <body>
-<div class="proto">Redesign prototype for review. Not the official site. "Reserve" buttons open the current live booking system. Forms here are demos.</div>
+<div class="proto" id="proto">Redesign prototype<span class="proto-x">. Not the official site. "Reserve" buttons open the current live booking system. Forms here are demos.</span></div>
 
 <header class="top">
   <div class="wrap">
@@ -152,8 +248,9 @@ footer a:hover{opacity:1;color:#fff}
       <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="16" fill="#ff6a1a"/><path d="M6 20c3 0 3-2 5.5-2S14 20 17 20s3-2 5.5-2S25 20 28 20v3c-3 0-3-2-5.5-2S20 23 17 23s-3-2-5.5-2S9 23 6 23z" fill="#fff"/><path d="M10 17l3-7h8l3 7z" fill="#0b2340"/></svg>
       <span>BIG JAMAICA<small>125' PARTY FISHING · BRIELLE NJ</small></span>
     </a>
-    <button class="burger" aria-label="Menu" onclick="document.querySelector('nav.main').classList.toggle('open')">☰</button>
+    <button class="burger" aria-label="Menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded',document.querySelector('nav.main').classList.toggle('open'))">☰</button>
     <nav class="main">
+      <a href="#book" class="only-m">Schedule &amp; Book</a>
       <a href="#trips">Trips &amp; Prices</a>
       <a href="#reports">Fishing Reports</a>
       <a href="#gallery">Gallery</a>
@@ -169,15 +266,23 @@ footer a:hover{opacity:1;color:#fff}
 <!-- ========== HOME ========== -->
 <main>
 <div class="page" id="p-home">
-  <div class="hero">
+  <div class="hero" role="img" aria-label="The 125-foot party boat Jamaica underway at sea">
     <div class="wrap">
-      <div class="eyebrow" style="color:#ffb48a">Sailing from Bogan's Basin, Brielle NJ</div>
+      <div class="eyebrow" style="color:#ffb48a">Sailing from Bogan's Basin, Brielle NJ <a class="maplink" href="https://www.google.com/maps/dir/?api=1&amp;destination=800+Ashley+Ave%2C+Brielle%2C+NJ+08730" target="_blank" rel="noopener">📍 See map</a></div>
       <h1>New Jersey's big boat for <span>serious fishing.</span></h1>
-      <p class="lead">Sea bass, bluefish, tuna, tilefish and stripers. Walk on with your cooler, we bring the bait, the rods and 125 feet of stable deck.</p>
       <div class="cta">
         <a class="btn btn-o" href="#book">See next sailings &amp; book</a>
         <a class="btn btn-g" href="#trips">Compare trips</a>
       </div>
+    </div>
+  </div>
+  <div class="hero-band">
+    <div class="wrap">
+      <div class="cta">
+        <a class="btn btn-o" href="#book">See next sailings &amp; book</a>
+        <a class="btn btn-g" href="#trips">Compare trips</a>
+      </div>
+      <p class="lead">Sea bass, bluefish, tuna, tilefish and stripers. Walk on with your cooler, we bring the bait, the rods and 125 feet of stable deck.</p>
       <div class="facts">
         <div><b>125'</b>stable, heated cabin</div>
         <div><b>from $75</b>per person</div>
@@ -185,7 +290,6 @@ footer a:hover{opacity:1;color:#fff}
         <div><b>Bunks</b>on overnight trips</div>
       </div>
     </div>
-    <svg class="waves" viewBox="0 0 1440 140" preserveAspectRatio="none" height="140" width="100%"><path fill="var(--bg)" d="M0 70c120-30 240-30 360 0s240 30 360 0 240-30 360 0 240 30 360 0v70H0z"/><path fill="var(--bg)" opacity=".5" d="M0 50c120 30 240 30 360 0s240-30 360 0 240 30 360 0 240-30 360 0v90H0z"/></svg>
   </div>
 
   <div class="wrap sailings">
@@ -247,10 +351,17 @@ footer a:hover{opacity:1;color:#fff}
 <!-- ========== BOOK / SCHEDULE ========== -->
 <div class="page" id="p-book">
   <section><div class="wrap">
-    <div class="sec-h"><div><div class="eyebrow">Schedule &amp; booking</div><h2 style="font-size:40px">Upcoming sailings</h2></div>
+    <div class="sec-h"><div><div class="eyebrow">Schedule &amp; booking</div><h2 style="font-size:40px">Sailing calendar</h2></div>
     <a class="btn btn-g btn-s" href="tel:7325285014">Questions? (732) 528-5014</a></div>
     <p class="note" style="max-width:720px">Pick a sailing and you'll go to our secure reservation system to choose tickets, rods and bunks and pay. Offshore trips are paid in full at booking and are non-refundable unless the captain cancels.</p>
     <div class="filters" id="bookFilters"></div>
+    <div class="cal-bar">
+      <div class="cal-nav"><button class="cal-arrow" id="calPrev" aria-label="Previous month" onclick="calMove(-1)">‹</button><h3 id="calTitle"></h3><button class="cal-arrow" id="calNext" aria-label="Next month" onclick="calMove(1)">›</button></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap"><select id="calJump" onchange="calGo(this.value)" aria-label="Jump to month" style="width:auto"></select>
+      <button class="chip" id="viewCal" onclick="setView('cal')">Calendar</button><button class="chip" id="viewList" onclick="setView('list')">List</button></div>
+    </div>
+    <div id="calendar"></div>
+    <div id="dayPanel"></div>
     <div id="schedule"></div>
   </div></section>
 </div>
@@ -296,7 +407,7 @@ footer a:hover{opacity:1;color:#fff}
         </form>
       </div>
     </div>
-    <div class="card tbl"><table id="chTable"></table>
+    <div class="card tbl"><table id="chTable" class="stack"></table>
       <p class="note">Rods and tackle included on day charters; tuna rod rental $30 on canyon trips. Bunk fee waived for charters. Weekend charters: $3,500 deposit, balance due 15 days before. Crew gratuity not included (15 to 20% suggested). Prices subject to change.</p></div>
   </div></section>
 </div>
@@ -320,7 +431,7 @@ footer a:hover{opacity:1;color:#fff}
         <h3>Getting here</h3>
         <p><b>Bogan's Deep Sea Fishing Center</b><br>800 Ashley Ave, Brielle, NJ 08730<br>Free parking at the dock lot. Tackle shop on site.</p>
         <div style="height:200px;border-radius:10px;background:linear-gradient(135deg,var(--foam),var(--sand));display:flex;align-items:center;justify-content:center" class="note">[ Embedded Google Map ]</div>
-        <p><a class="btn btn-o btn-s" href="https://maps.app.goo.gl/B7WVrarUCGvnciou7" target="_blank" rel="noopener">Open in Google Maps</a></p>
+        <p><a class="btn btn-o btn-s" href="https://www.google.com/maps/dir/?api=1&amp;destination=800+Ashley+Ave%2C+Brielle%2C+NJ+08730" target="_blank" rel="noopener">Get directions</a></p>
       </div>
       <div class="card"><h3>Staying overnight?</h3><p class="note">Nearby hotels list goes here (content from the current Directions/Hotels page, pending).</p></div>
       <div class="card" id="policies"><h3>Policies, in plain English</h3>
@@ -398,7 +509,11 @@ footer a:hover{opacity:1;color:#fff}
 const D=JSON.parse(JSON.stringify(window.DEFAULT_CONTENT));
 let TRIPS=D.trips,SAILINGS=D.sailings,REPORTS=D.reports,CHARTERS=D.charters,PHOTOS=D.photos;
 // Content saved from admin.html (prototype: browser storage; production: CMS/API)
-try{const c=JSON.parse(localStorage.getItem("bj_content")||"null");if(c){if(c.trips)TRIPS=c.trips;if(c.sailings)SAILINGS=c.sailings;if(c.reports)REPORTS=c.reports;if(c.photos)PHOTOS=c.photos;if(c.charters)CHARTERS=c.charters;}}catch(e){}
+function applyContent(c){if(!c)return;if(c.trips)TRIPS=c.trips;if(c.sailings)SAILINGS=c.sailings;if(c.reports)REPORTS=c.reports;if(c.photos)PHOTOS=c.photos;if(c.charters)CHARTERS=c.charters}
+// Local preview only: the prototype admin saves to this browser. On the hosted site content.json is the truth.
+const LOCAL_PREVIEW=["localhost","127.0.0.1",""].includes(location.hostname);
+function localOverride(){if(!LOCAL_PREVIEW)return;try{applyContent(JSON.parse(localStorage.getItem("bj_content")||"null"))}catch(e){}}
+localOverride();
 const $=s=>document.querySelector(s), fmt=n=>"$"+n.toLocaleString();
 const byId=id=>TRIPS.find(t=>t.id===id);
 const fromPrice=t=>Math.min(...Object.values(t.prices));
@@ -461,20 +576,58 @@ function seatPill(s){
   if(s.status==="soldout"||s.left<=0)return '<span class="pill">Sold out</span>';
   return s.left<10?`<span class="pill hot">Only ${s.left} left</span>`:`<span class="pill ok">${s.left} open</span>`;
 }
+const todayISO=()=>{const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+let calY,calM,selDay=null,bview="cal";
+try{bview=localStorage.getItem("bj_view")||"cal"}catch(e){}
+const MAXM=12; // months ahead the calendar can browse
+function monthIdx(y,m){return y*12+m}
+function calBounds(){const t=new Date();return [monthIdx(t.getFullYear(),t.getMonth()),monthIdx(t.getFullYear(),t.getMonth())+MAXM]}
+function visible(){return SAILINGS.filter(s=>(bf==="all"||s.t===bf)&&byId(s.t))}
+function sailRow(s){const t=byId(s.t),d=dt(s.d),can=s.status!=="cancelled"&&s.status!=="soldout"&&s.left>0;
+  return `<div class="opt"><div class="sail"><div class="date"><span>${d.toLocaleString('en-US',{weekday:'short'})}</span><b>${d.getDate()}</b></div>
+   <div><b>${t.name}</b><div class="note">${s.time||t.time} · ${fmt(t.prices.Adult)} adult · <a href="#trip/${t.id}">details</a></div>${s.note?`<div class="note">${esc(s.note)}</div>`:''}</div></div>
+   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:end">${seatPill(s)}${can?`<a class="btn btn-o btn-s" href="${bookHref(t)}" target="_blank" rel="noopener">Reserve ↗</a>`:''}</div></div>`}
 function renderBook(only){
-  if(only)bf=only;
-  const ids=[...new Set(SAILINGS.map(s=>s.t))];
-  $("#bookFilters").innerHTML=[`<button class="chip ${bf==='all'?'on':''}" onclick="renderBook('all')">All</button>`,...ids.map(id=>`<button class="chip ${bf===id?'on':''}" onclick="renderBook('${id}')">${byId(id)?.name||id}</button>`)].join("");
-  const list=SAILINGS.filter(s=>bf==="all"||s.t===bf).sort((a,b)=>a.d.localeCompare(b.d));
-  let html="",mon="";
-  list.forEach(s=>{const t=byId(s.t);if(!t)return;const d=dt(s.d),m=d.toLocaleString('en-US',{month:'long',year:'numeric'});
-    if(m!==mon){html+=`<h3 style="margin:26px 0 10px">${m}</h3>`;mon=m}
-    const can=s.status!=="cancelled"&&s.status!=="soldout"&&s.left>0;
-    html+=`<div class="opt"><div class="sail"><div class="date"><span>${d.toLocaleString('en-US',{weekday:'short'})}</span><b>${d.getDate()}</b></div>
-      <div><b>${t.name}</b><div class="note">${s.time||t.time} · ${fmt(t.prices.Adult)} adult · <a href="#trip/${t.id}">details</a></div>${s.note?`<div class="note">${s.note}</div>`:''}</div></div>
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:end">${seatPill(s)}${can?`<a class="btn btn-o btn-s" href="${bookHref(t)}" target="_blank" rel="noopener">Reserve ↗</a>`:''}</div></div>`});
-  $("#schedule").innerHTML=html||'<p class="note">No sailings posted yet. Call the office.</p>';
+  if(only&&only!==bf){bf=only;selDay=null;
+    const nx=visible().filter(s=>s.d>=todayISO()).sort((a,b)=>a.d.localeCompare(b.d))[0];
+    if(nx){const d=dt(nx.d);calY=d.getFullYear();calM=d.getMonth()}}
+  const ids=[...new Set(SAILINGS.map(s=>s.t))].filter(byId);
+  $("#bookFilters").innerHTML=[`<button class="chip ${bf==='all'?'on':''}" onclick="renderBook('all')">All trips</button>`,...ids.map(id=>`<button class="chip ${bf===id?'on':''}" onclick="renderBook('${id}')">${byId(id).name}</button>`)].join("");
+  if(calY===undefined){const t=new Date();calY=t.getFullYear();calM=t.getMonth()}
+  const [lo,hi]=calBounds();
+  // jump list: month name + number of sailings
+  const vis=visible().filter(s=>s.d>=todayISO());
+  let opts="";for(let i=lo;i<=hi;i++){const y=Math.floor(i/12),m=i%12,key=`${y}-${String(m+1).padStart(2,"0")}`,n=vis.filter(s=>s.d.startsWith(key)).length;
+    opts+=`<option value="${i}" ${i===monthIdx(calY,calM)?'selected':''}>${new Date(y,m,1).toLocaleString('en-US',{month:'long',year:'numeric'})}${n?` (${n})`:' (none yet)'}</option>`}
+  $("#calJump").innerHTML=opts;
+  $("#viewCal").classList.toggle("on",bview==="cal");$("#viewList").classList.toggle("on",bview==="list");
+  $("#calTitle").textContent=new Date(calY,calM,1).toLocaleString('en-US',{month:'long',year:'numeric'});
+  $("#calPrev").disabled=monthIdx(calY,calM)<=lo;$("#calNext").disabled=monthIdx(calY,calM)>=hi;
+  const key=`${calY}-${String(calM+1).padStart(2,"0")}`, inMonth=vis.filter(s=>s.d.startsWith(key)).sort((a,b)=>a.d.localeCompare(b.d));
+  if(bview==="list"){
+    $("#calendar").innerHTML="";$("#dayPanel").innerHTML="";
+    $("#schedule").innerHTML=inMonth.length?inMonth.map(sailRow).join(""):emptyMonth();
+    return;
+  }
+  $("#schedule").innerHTML="";
+  const first=new Date(calY,calM,1).getDay(), days=new Date(calY,calM+1,0).getDate(), today=todayISO();
+  let h=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d=>`<div class="dow">${d}</div>`).join("");
+  for(let i=0;i<first;i++)h+=`<div class="day blank"></div>`;
+  if(!selDay||!selDay.startsWith(key))selDay=inMonth[0]?.d||null;
+  for(let d=1;d<=days;d++){
+    const iso=`${key}-${String(d).padStart(2,"0")}`, ss=inMonth.filter(s=>s.d===iso), past=iso<today;
+    const ev=ss.slice(0,2).map(s=>{const t=byId(s.t),x=s.status==="cancelled";return `<span class="ev ${x?'x':''}" style="background:${t.c[0]}">${t.name.replace(/^[\d.]+-(Hour|Day) /,'')}</span>`}).join("");
+    h+=`<button class="day ${ss.length?'has':''} ${past?'past':''} ${iso===today?'today':''} ${iso===selDay?'sel':''}" ${ss.length&&!past?`onclick="selDay='${iso}';renderBook()"`:'disabled'} aria-label="${iso}: ${ss.length} sailings">
+      <span class="n">${d}</span>${ev}${ss.length>2?`<span class="more">+${ss.length-2} more</span>`:''}<span class="dots">${ss.map(s=>`<i style="background:${byId(s.t).c[0]}"></i>`).join("")}</span></button>`;
+  }
+  $("#calendar").innerHTML=`<div class="cal">${h}</div>`;
+  const sel=inMonth.filter(s=>s.d===selDay);
+  $("#dayPanel").innerHTML=sel.length?`<h3>${dt(selDay).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}</h3>`+sel.map(sailRow).join(""):(inMonth.length?"":emptyMonth());
 }
+function emptyMonth(){return `<div class="card" style="text-align:center;margin-top:14px"><p style="margin:0 0 6px"><b>No sailings posted for this month yet.</b></p><p class="note" style="margin:0">The schedule is usually posted a few weeks ahead. Call <a href="tel:7325285014">(732) 528-5014</a> to ask or to get on a waitlist.</p></div>`}
+function calMove(n){const [lo,hi]=calBounds(),i=Math.min(hi,Math.max(lo,monthIdx(calY,calM)+n));calY=Math.floor(i/12);calM=i%12;selDay=null;renderBook()}
+function calGo(i){i=+i;calY=Math.floor(i/12);calM=i%12;selDay=null;renderBook()}
+function setView(v){bview=v;try{localStorage.setItem("bj_view",v)}catch(e){}renderBook()}
 // ---------- GALLERY ----------
 function renderGallery(){
   $("#gallery").innerHTML=PHOTOS.length?PHOTOS.map((p,i)=>`<figure onclick="lbOpen(${i})">${p.src?`<img src="${p.src}" alt="${esc(p.cap)}" loading="lazy">`:`<div class="phd" style="background:linear-gradient(135deg,${["#1f6f8b","#ff6a1a","#2a8fa8","#0b2340"][i%4]},#0b2340)">🐟</div>`}<figcaption>${esc(p.cap)}<span>${p.d?dt(p.d).toLocaleDateString('en-US',{month:'short',day:'numeric'}):''}</span></figcaption></figure>`).join(""):'<p class="note">No photos yet.</p>';
@@ -490,7 +643,7 @@ function renderReports(){
 }
 // ---------- CHARTERS ----------
 function renderCharters(){
-  $("#chTable").innerHTML=`<tr><th>Charter</th><th>When</th><th>Base price</th><th>Includes up to</th><th>Each extra</th></tr>`+CHARTERS.map(c=>`<tr><td><b>${c[0]}</b></td><td>${c[1]}</td><td>${fmt(c[2])}</td><td>${c[3]} people</td><td>${fmt(c[4])}</td></tr>`).join("");
+  $("#chTable").innerHTML=`<tr><th>Charter</th><th>When</th><th>Base price</th><th>Includes up to</th><th>Each extra</th></tr>`+CHARTERS.map(c=>`<tr><td><b>${c[0]}</b></td><td data-l="When">${c[1]}</td><td data-l="Base price">${fmt(c[2])}</td><td data-l="Includes up to">${c[3]} people</td><td data-l="Each extra">${fmt(c[4])}</td></tr>`).join("");
   $("#chType").innerHTML=CHARTERS.map((c,i)=>`<option value="${i}">${c[0]}</option>`).join("");
   const calc=()=>{const c=CHARTERS[$("#chType").value],n=+$("#chSize").value||0,ex=Math.max(0,n-c[3]),base=c[2]+ex*c[4],tip=Math.round(base*.18);
    $("#chOut").innerHTML=`<div class="line" style="display:flex;justify-content:space-between"><span>Base (up to ${c[3]})</span><b>${fmt(c[2])}</b></div>${ex?`<div style="display:flex;justify-content:space-between"><span>${ex} extra × ${fmt(c[4])}</span><b>${fmt(ex*c[4])}</b></div>`:''}
@@ -516,6 +669,8 @@ function route(){
   window.scrollTo(0,0);
 }
 renderHome(); window.onhashchange=route; route();
+// Published content (what the admin page saves on the hosted site)
+fetch("content.json",{cache:"no-cache"}).then(r=>r.ok?r.json():null).then(c=>{if(!c)return;applyContent(c);localOverride();renderHome();route()}).catch(()=>{});
 </script>
 </body>
 </html>

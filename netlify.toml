@@ -1,0 +1,41 @@
+# Netlify config: static site, no build step, one function for the admin page.
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/api/admin"
+  to = "/.netlify/functions/admin"
+  status = 200
+
+# Don't serve repo housekeeping files
+[[redirects]]
+  from = "/HANDOFF.md"
+  to = "/"
+  status = 302
+[[redirects]]
+  from = "/README.md"
+  to = "/"
+  status = 302
+[[redirects]]
+  from = "/DEPLOY.md"
+  to = "/"
+  status = 302
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"
+    # DRAFT ONLY: keeps search engines from indexing the preview. Remove this line at launch.
+    X-Robots-Tag = "noindex, nofollow"
+[[headers]]
+  for = "/content.json"
+  [headers.values]
+    Cache-Control = "no-cache"
+[[headers]]
+  for = "/admin.html"
+  [headers.values]
+    Cache-Control = "no-store"
+    X-Robots-Tag = "noindex"
