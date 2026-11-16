@@ -39,3 +39,16 @@ To preview, open `index.html` in a browser. Open `admin.html`, log in with any p
 - **Content rights.** Owner is on board, but get written OK to reuse their text and photos, and get the original photo files.
 - **Domain and hosting.** Someone with access to the domain registrar must point `www` at the new host.
 - **Placeholder data.** The Bonito special price ($120) is a guess. The sample sailings are demo data. The trip and gallery "photos" are color placeholders.
+
+## Round 2 features (status bar, forecast, photo feed, SMS and waiting list mock-ups)
+- **Sailing status bar**: real. Staff tap Sailing / Watching weather / Cancelled in the admin. It shows on every page. If nobody posts a status that day, the bar says "not posted yet" and gives the phone number, so a stale "Sailing" can never show.
+- **Marine forecast**: real. Read live in the visitor's browser from NOAA's free API (`api.weather.gov`, zone ANZ450, Sandy Hook to Manasquan Inlet out 20 nm). No key, no cost. It is the coastal forecast, not the canyons. If NOAA is down the section just hides.
+- **Fishing reports photo feed**: real. Share uses the phone's share sheet; on desktop it copies a link. Facebook previews show the site, not the single report, until each report has its own page.
+- **Text alerts page, phone + SMS consent before Reserve, waiting list**: MOCK-UPS. Each is labeled "Demo". Nothing is stored or sent.
+
+### To make SMS and the waiting list real
+1. **An SMS provider** (Twilio or similar) with a registered number. US carriers require business registration (A2P 10DLC) before texts deliver. Allow a few weeks and a small monthly cost.
+2. **Somewhere to store numbers and consent** with a timestamp and the exact wording shown. That means a small database, not the git repo: phone numbers must not sit in a code repository.
+3. **Consent wording reviewed** for TCPA. The text on the site is a reasonable sample, not legal advice. STOP and HELP replies must work.
+4. **Which phone booked which trip.** Booking stays on the old system, so either its developer sends us bookings (or adds the consent box on their form), or cancellation texts only reach people who typed their number on our side.
+5. **Seat counts from the booking system** for the waiting list. Today "sold out" is whatever staff set in the admin.
