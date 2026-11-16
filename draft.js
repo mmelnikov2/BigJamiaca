@@ -2,6 +2,10 @@
 // THE ONE SWITCH: set this to false at launch and the watermark disappears everywhere.
 window.SITE_DRAFT = true;
 
+// While drafting, Reserve buttons open a demo booking page inside the site instead of the live booking system.
+// Follows SITE_DRAFT, so the launch switch above also restores the real booking hand-off.
+window.BOOKING_DEMO = window.SITE_DRAFT;
+
 (function () {
   if (!window.SITE_DRAFT) return;
   var svg = "<svg xmlns='http://www.w3.org/2000/svg' width='340' height='240'>" +
