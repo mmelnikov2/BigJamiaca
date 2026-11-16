@@ -139,6 +139,27 @@ footer a:hover{opacity:1;color:#fff}
 .gal figcaption{padding:10px 12px;font-size:14px;display:flex;justify-content:space-between;gap:8px}.gal figcaption span{color:var(--muted)}
 .lb{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;color:#fff}
 .lb img{max-width:100%;max-height:80vh;border-radius:8px}
+.cal-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:6px 0 12px}
+.cal-nav{display:flex;align-items:center;gap:10px}.cal-nav h3{margin:0;min-width:190px;text-align:center;font-size:24px}
+.cal-arrow{width:42px;height:42px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:24px;cursor:pointer}
+.cal-arrow:disabled{opacity:.3;cursor:default}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal .dow{font:700 12px Archivo;letter-spacing:1px;text-transform:uppercase;color:var(--muted);text-align:center;padding:4px 0}
+.day{min-height:96px;border:1px solid var(--line);border-radius:10px;background:var(--card);padding:6px;text-align:left;font:inherit;color:inherit;display:flex;flex-direction:column;gap:3px;cursor:default}
+.day.has{cursor:pointer}.day.has:hover{border-color:var(--orange)}
+.day.sel{box-shadow:0 0 0 2px var(--orange) inset;border-color:var(--orange)}
+.day.past,.day.blank{opacity:.35;background:transparent}.day.blank{border:0}
+.day.today .n{background:var(--navy);color:#fff;border-radius:99px;padding:0 7px}
+.day .n{font-weight:700;font-size:14px;align-self:flex-start}
+.ev{font-size:11.5px;line-height:1.25;padding:2px 6px;border-radius:5px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev.x{background:#999!important;text-decoration:line-through}
+.more{font-size:11px;color:var(--muted)}
+.dots{display:none;gap:3px;flex-wrap:wrap}.dots i{width:7px;height:7px;border-radius:9px;display:block}
+@media(max-width:700px){.day{min-height:54px;padding:4px}.ev,.more{display:none}.dots{display:flex}.cal{gap:3px}.cal-nav h3{min-width:150px;font-size:19px}}
+#dayPanel h3{margin:22px 0 10px}
+.maplink{margin-left:10px;padding:3px 10px;border:1px solid rgba(255,180,138,.6);border-radius:99px;text-decoration:none;letter-spacing:1px;white-space:nowrap}
+.maplink:hover{background:rgba(255,255,255,.12)}
+@media(max-width:700px){#bookFilters{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}#bookFilters .chip{flex:none}.maplink{display:inline-block;margin:6px 0 0}}
 .page{display:none}.page.on{display:block}
 .hide{display:none!important}
 </style>
@@ -171,7 +192,7 @@ footer a:hover{opacity:1;color:#fff}
 <div class="page" id="p-home">
   <div class="hero">
     <div class="wrap">
-      <div class="eyebrow" style="color:#ffb48a">Sailing from Bogan's Basin, Brielle NJ</div>
+      <div class="eyebrow" style="color:#ffb48a">Sailing from Bogan's Basin, Brielle NJ <a class="maplink" href="https://www.google.com/maps/dir/?api=1&amp;destination=800+Ashley+Ave%2C+Brielle%2C+NJ+08730" target="_blank" rel="noopener">📍 See map</a></div>
       <h1>New Jersey's big boat for <span>serious fishing.</span></h1>
       <p class="lead">Sea bass, bluefish, tuna, tilefish and stripers. Walk on with your cooler, we bring the bait, the rods and 125 feet of stable deck.</p>
       <div class="cta">
@@ -247,10 +268,17 @@ footer a:hover{opacity:1;color:#fff}
 <!-- ========== BOOK / SCHEDULE ========== -->
 <div class="page" id="p-book">
   <section><div class="wrap">
-    <div class="sec-h"><div><div class="eyebrow">Schedule &amp; booking</div><h2 style="font-size:40px">Upcoming sailings</h2></div>
+    <div class="sec-h"><div><div class="eyebrow">Schedule &amp; booking</div><h2 style="font-size:40px">Sailing calendar</h2></div>
     <a class="btn btn-g btn-s" href="tel:7325285014">Questions? (732) 528-5014</a></div>
     <p class="note" style="max-width:720px">Pick a sailing and you'll go to our secure reservation system to choose tickets, rods and bunks and pay. Offshore trips are paid in full at booking and are non-refundable unless the captain cancels.</p>
     <div class="filters" id="bookFilters"></div>
+    <div class="cal-bar">
+      <div class="cal-nav"><button class="cal-arrow" id="calPrev" aria-label="Previous month" onclick="calMove(-1)">‹</button><h3 id="calTitle"></h3><button class="cal-arrow" id="calNext" aria-label="Next month" onclick="calMove(1)">›</button></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap"><select id="calJump" onchange="calGo(this.value)" aria-label="Jump to month" style="width:auto"></select>
+      <button class="chip" id="viewCal" onclick="setView('cal')">Calendar</button><button class="chip" id="viewList" onclick="setView('list')">List</button></div>
+    </div>
+    <div id="calendar"></div>
+    <div id="dayPanel"></div>
     <div id="schedule"></div>
   </div></section>
 </div>
@@ -320,7 +348,7 @@ footer a:hover{opacity:1;color:#fff}
         <h3>Getting here</h3>
         <p><b>Bogan's Deep Sea Fishing Center</b><br>800 Ashley Ave, Brielle, NJ 08730<br>Free parking at the dock lot. Tackle shop on site.</p>
         <div style="height:200px;border-radius:10px;background:linear-gradient(135deg,var(--foam),var(--sand));display:flex;align-items:center;justify-content:center" class="note">[ Embedded Google Map ]</div>
-        <p><a class="btn btn-o btn-s" href="https://maps.app.goo.gl/B7WVrarUCGvnciou7" target="_blank" rel="noopener">Open in Google Maps</a></p>
+        <p><a class="btn btn-o btn-s" href="https://www.google.com/maps/dir/?api=1&amp;destination=800+Ashley+Ave%2C+Brielle%2C+NJ+08730" target="_blank" rel="noopener">Get directions</a></p>
       </div>
       <div class="card"><h3>Staying overnight?</h3><p class="note">Nearby hotels list goes here (content from the current Directions/Hotels page, pending).</p></div>
       <div class="card" id="policies"><h3>Policies, in plain English</h3>
@@ -461,20 +489,58 @@ function seatPill(s){
   if(s.status==="soldout"||s.left<=0)return '<span class="pill">Sold out</span>';
   return s.left<10?`<span class="pill hot">Only ${s.left} left</span>`:`<span class="pill ok">${s.left} open</span>`;
 }
+const todayISO=()=>{const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+let calY,calM,selDay=null,bview="cal";
+try{bview=localStorage.getItem("bj_view")||"cal"}catch(e){}
+const MAXM=12; // months ahead the calendar can browse
+function monthIdx(y,m){return y*12+m}
+function calBounds(){const t=new Date();return [monthIdx(t.getFullYear(),t.getMonth()),monthIdx(t.getFullYear(),t.getMonth())+MAXM]}
+function visible(){return SAILINGS.filter(s=>(bf==="all"||s.t===bf)&&byId(s.t))}
+function sailRow(s){const t=byId(s.t),d=dt(s.d),can=s.status!=="cancelled"&&s.status!=="soldout"&&s.left>0;
+  return `<div class="opt"><div class="sail"><div class="date"><span>${d.toLocaleString('en-US',{weekday:'short'})}</span><b>${d.getDate()}</b></div>
+   <div><b>${t.name}</b><div class="note">${s.time||t.time} · ${fmt(t.prices.Adult)} adult · <a href="#trip/${t.id}">details</a></div>${s.note?`<div class="note">${esc(s.note)}</div>`:''}</div></div>
+   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:end">${seatPill(s)}${can?`<a class="btn btn-o btn-s" href="${bookHref(t)}" target="_blank" rel="noopener">Reserve ↗</a>`:''}</div></div>`}
 function renderBook(only){
-  if(only)bf=only;
-  const ids=[...new Set(SAILINGS.map(s=>s.t))];
-  $("#bookFilters").innerHTML=[`<button class="chip ${bf==='all'?'on':''}" onclick="renderBook('all')">All</button>`,...ids.map(id=>`<button class="chip ${bf===id?'on':''}" onclick="renderBook('${id}')">${byId(id)?.name||id}</button>`)].join("");
-  const list=SAILINGS.filter(s=>bf==="all"||s.t===bf).sort((a,b)=>a.d.localeCompare(b.d));
-  let html="",mon="";
-  list.forEach(s=>{const t=byId(s.t);if(!t)return;const d=dt(s.d),m=d.toLocaleString('en-US',{month:'long',year:'numeric'});
-    if(m!==mon){html+=`<h3 style="margin:26px 0 10px">${m}</h3>`;mon=m}
-    const can=s.status!=="cancelled"&&s.status!=="soldout"&&s.left>0;
-    html+=`<div class="opt"><div class="sail"><div class="date"><span>${d.toLocaleString('en-US',{weekday:'short'})}</span><b>${d.getDate()}</b></div>
-      <div><b>${t.name}</b><div class="note">${s.time||t.time} · ${fmt(t.prices.Adult)} adult · <a href="#trip/${t.id}">details</a></div>${s.note?`<div class="note">${s.note}</div>`:''}</div></div>
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:end">${seatPill(s)}${can?`<a class="btn btn-o btn-s" href="${bookHref(t)}" target="_blank" rel="noopener">Reserve ↗</a>`:''}</div></div>`});
-  $("#schedule").innerHTML=html||'<p class="note">No sailings posted yet. Call the office.</p>';
+  if(only&&only!==bf){bf=only;selDay=null;
+    const nx=visible().filter(s=>s.d>=todayISO()).sort((a,b)=>a.d.localeCompare(b.d))[0];
+    if(nx){const d=dt(nx.d);calY=d.getFullYear();calM=d.getMonth()}}
+  const ids=[...new Set(SAILINGS.map(s=>s.t))].filter(byId);
+  $("#bookFilters").innerHTML=[`<button class="chip ${bf==='all'?'on':''}" onclick="renderBook('all')">All trips</button>`,...ids.map(id=>`<button class="chip ${bf===id?'on':''}" onclick="renderBook('${id}')">${byId(id).name}</button>`)].join("");
+  if(calY===undefined){const t=new Date();calY=t.getFullYear();calM=t.getMonth()}
+  const [lo,hi]=calBounds();
+  // jump list: month name + number of sailings
+  const vis=visible().filter(s=>s.d>=todayISO());
+  let opts="";for(let i=lo;i<=hi;i++){const y=Math.floor(i/12),m=i%12,key=`${y}-${String(m+1).padStart(2,"0")}`,n=vis.filter(s=>s.d.startsWith(key)).length;
+    opts+=`<option value="${i}" ${i===monthIdx(calY,calM)?'selected':''}>${new Date(y,m,1).toLocaleString('en-US',{month:'long',year:'numeric'})}${n?` (${n})`:' (none yet)'}</option>`}
+  $("#calJump").innerHTML=opts;
+  $("#viewCal").classList.toggle("on",bview==="cal");$("#viewList").classList.toggle("on",bview==="list");
+  $("#calTitle").textContent=new Date(calY,calM,1).toLocaleString('en-US',{month:'long',year:'numeric'});
+  $("#calPrev").disabled=monthIdx(calY,calM)<=lo;$("#calNext").disabled=monthIdx(calY,calM)>=hi;
+  const key=`${calY}-${String(calM+1).padStart(2,"0")}`, inMonth=vis.filter(s=>s.d.startsWith(key)).sort((a,b)=>a.d.localeCompare(b.d));
+  if(bview==="list"){
+    $("#calendar").innerHTML="";$("#dayPanel").innerHTML="";
+    $("#schedule").innerHTML=inMonth.length?inMonth.map(sailRow).join(""):emptyMonth();
+    return;
+  }
+  $("#schedule").innerHTML="";
+  const first=new Date(calY,calM,1).getDay(), days=new Date(calY,calM+1,0).getDate(), today=todayISO();
+  let h=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d=>`<div class="dow">${d}</div>`).join("");
+  for(let i=0;i<first;i++)h+=`<div class="day blank"></div>`;
+  if(!selDay||!selDay.startsWith(key))selDay=inMonth[0]?.d||null;
+  for(let d=1;d<=days;d++){
+    const iso=`${key}-${String(d).padStart(2,"0")}`, ss=inMonth.filter(s=>s.d===iso), past=iso<today;
+    const ev=ss.slice(0,2).map(s=>{const t=byId(s.t),x=s.status==="cancelled";return `<span class="ev ${x?'x':''}" style="background:${t.c[0]}">${t.name.replace(/^[\d.]+-(Hour|Day) /,'')}</span>`}).join("");
+    h+=`<button class="day ${ss.length?'has':''} ${past?'past':''} ${iso===today?'today':''} ${iso===selDay?'sel':''}" ${ss.length&&!past?`onclick="selDay='${iso}';renderBook()"`:'disabled'} aria-label="${iso}: ${ss.length} sailings">
+      <span class="n">${d}</span>${ev}${ss.length>2?`<span class="more">+${ss.length-2} more</span>`:''}<span class="dots">${ss.map(s=>`<i style="background:${byId(s.t).c[0]}"></i>`).join("")}</span></button>`;
+  }
+  $("#calendar").innerHTML=`<div class="cal">${h}</div>`;
+  const sel=inMonth.filter(s=>s.d===selDay);
+  $("#dayPanel").innerHTML=sel.length?`<h3>${dt(selDay).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}</h3>`+sel.map(sailRow).join(""):(inMonth.length?"":emptyMonth());
 }
+function emptyMonth(){return `<div class="card" style="text-align:center;margin-top:14px"><p style="margin:0 0 6px"><b>No sailings posted for this month yet.</b></p><p class="note" style="margin:0">The schedule is usually posted a few weeks ahead. Call <a href="tel:7325285014">(732) 528-5014</a> to ask or to get on a waitlist.</p></div>`}
+function calMove(n){const [lo,hi]=calBounds(),i=Math.min(hi,Math.max(lo,monthIdx(calY,calM)+n));calY=Math.floor(i/12);calM=i%12;selDay=null;renderBook()}
+function calGo(i){i=+i;calY=Math.floor(i/12);calM=i%12;selDay=null;renderBook()}
+function setView(v){bview=v;try{localStorage.setItem("bj_view",v)}catch(e){}renderBook()}
 // ---------- GALLERY ----------
 function renderGallery(){
   $("#gallery").innerHTML=PHOTOS.length?PHOTOS.map((p,i)=>`<figure onclick="lbOpen(${i})">${p.src?`<img src="${p.src}" alt="${esc(p.cap)}" loading="lazy">`:`<div class="phd" style="background:linear-gradient(135deg,${["#1f6f8b","#ff6a1a","#2a8fa8","#0b2340"][i%4]},#0b2340)">🐟</div>`}<figcaption>${esc(p.cap)}<span>${p.d?dt(p.d).toLocaleDateString('en-US',{month:'short',day:'numeric'}):''}</span></figcaption></figure>`).join(""):'<p class="note">No photos yet.</p>';

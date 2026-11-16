@@ -22,6 +22,14 @@ DEFAULT_CONTENT.sailings=[ // demo calendar (admin edits this)
  {t:"overnight-sb",d:"2026-11-19",left:9},{t:"overnight-sb",d:"2026-11-20",left:31},{t:"overnight-sb",d:"2026-11-21",left:3},
  {t:"thanks",d:"2026-11-26",left:40},{t:"marathon",d:"2026-11-22",left:18},{t:"marathon",d:"2026-11-29",left:35}
 ];
+// Demo: fill future months so the calendar has something to show (replace with real schedule)
+(function(){const add=(t,from,to,days,left)=>{for(let d=new Date(from+"T12:00:00");d<=new Date(to+"T12:00:00");d.setDate(d.getDate()+1)){if(days.includes(d.getDay()))DEFAULT_CONTENT.sailings.push({t,d:d.toISOString().slice(0,10),left:left+((d.getDate()*7)%23)})}};
+ add("overnight-sb","2026-11-24","2027-02-27",[2,4,5,6],8);   // Tue/Thu/Fri/Sat nights
+ add("marathon","2026-12-06","2026-12-27",[0],12);           // Sundays in December
+ add("midrange","2026-12-01","2026-12-31",[1,3],10);         // Mon/Wed in December
+ add("fullday","2027-01-03","2027-03-28",[0],20);            // Sundays Jan–Mar
+ add("sb-special","2027-03-01","2027-03-31",[3,6],15);       // Wed/Sat in March
+})();
 DEFAULT_CONTENT.reports=[
  {d:"2026-09-09",t:"New Bonito, Albacore & Bluefish Special, Friday 6:30 AM",tag:"Bonito",x:"Bonito and albacore showed up on the inshore lumps. Adding a special Friday trip, limited spots.",s:{}},
  {d:"2026-09-01",t:"Schedule & Report: Tuna Trip Thursday 7 AM",tag:"Tuna",x:"Good tuna bite at the canyon last trip. Few spots left for Thursday.",s:{"Tuna":"12"}},
