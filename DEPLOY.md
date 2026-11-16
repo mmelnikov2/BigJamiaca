@@ -42,3 +42,14 @@ In Netlify, Domain management, add the domain and follow the DNS steps. HTTPS is
 - Logins are shared-secret passwords stored in Netlify settings. That's fine for a few staff. It is not a full user-account system with password reset.
 - Contact, charter and gift card forms are still demos. They need Netlify Forms or the current developer's backend.
 - This function was tested against a simulated GitHub, not the live service. Step 6 is the real test.
+
+## Password on the whole site (private preview)
+`netlify/edge-functions/gate.js` puts one password box in front of everything: pages, photos, `content.json` and the admin page. The check runs on Netlify before any file is served, so a direct file address is blocked too.
+
+- **Turn on:** in Netlify, Environment variables, add `SITE_PASSWORD` with the shared password as the value. Then Deploys, Trigger deploy.
+- **Change the password:** edit `SITE_PASSWORD` and redeploy. Everyone has to enter the new one.
+- **Turn off (at launch):** delete `SITE_PASSWORD` and redeploy. The site is public again.
+
+Visitors enter it once per device and are remembered for 30 days. The admin page keeps its own staff login behind the gate, so staff enter two passwords: the site one, then their own.
+
+Limits: it is one shared password, so anyone it's forwarded to gets in. Wrong guesses are slowed down but not locked out, so use a long one (four random words). It does not apply to the local preview on your PC.
