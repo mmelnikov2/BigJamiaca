@@ -1,0 +1,41 @@
+# Big Jamaica redesign: status and handoff
+
+## Files
+- `index.html` is the public site (one page app: home, trips, trip detail, schedule, reports, gallery, charters, plan your trip/FAQ, gift cards, contact).
+- `admin.html` is the staff admin (schedule, fishing reports, photos, trips & prices, backup).
+- `content.js` holds the default content (trips, prices, sailings, reports, charters, photos). Copied from the current site in Nov 2026.
+
+To preview, open `index.html` in a browser. Open `admin.html`, log in with any password, make a change, and reload `index.html` in the same browser to see it.
+
+## Feature parity with current bigjamaica.com
+
+| Current site | New site | Status |
+|---|---|---|
+| Home, upcoming sailings | Home + "Next sailings" strip | Done |
+| Trip descriptions | Trips page with filters + per-trip page with real cost calculator | Done |
+| Book Now (per-trip booking pages) | Schedule page, "Reserve" deep-links to existing booking pages | Done, uses current backend |
+| Fishing reports | Reports with species filter, photo, high hook/pool stats | Done |
+| Photo gallery | Gallery with lightbox | Done |
+| FAQ | Plan Your Trip page | Done |
+| Private charters | Price table + estimator + request form | Form needs a backend |
+| Gift certificate | New design, links to current order page | See security note |
+| Contact form + email blast signup | Contact page | Form needs a backend |
+| Directions / hotels | Plan Your Trip page | Hotel list not copied yet (page was rate-limited) |
+| America 250 / July 4th page | "July 4th Fireworks" special trip | Done as a trip; one-off pages can be report posts |
+| Policies (terms, cancellation, privacy, trip reservation) | Plain-English summary + links | Full texts still need copying |
+| Link to 100' Paramount | Footer link | Done |
+| (none) | Admin page for schedule, posts, photos, prices | Prototype (browser storage only) |
+
+## What the current developer must provide (booking stays on their system)
+1. **Booking pages stay live** at a stable URL, ideally `book.bigjamaica.com/...` once the new site takes over `www`. The trip to URL map is the `bookUrl` field in `content.js`.
+2. **A schedule + seats feed** (JSON, iCal, or API) so the "Next sailings" and seats-left badges are automatic. Without it, staff enter the schedule twice: once in the booking system and once in our admin.
+3. **Prices**: the booking system is the source of truth for what's charged. Our admin price edits only change what the website shows. Either they share prices in the feed, or staff must update both.
+4. **Gift certificates and the contact/email-blast list**: confirm whether these stay on their system, and export the email list if not.
+5. **Their styling hooks** (optional): let us restyle the booking pages so the hand-off doesn't look like a different site.
+
+## Holes to close before launch
+- **Admin is a prototype.** It saves to one browser. Production needs a real backend: a headless CMS (e.g. Decap CMS on Netlify, free and git-based) or a small database (e.g. Supabase). It also needs real staff logins.
+- **Card security on gift certificates.** The current order form appears to collect card details directly on the page. Confirm it's PCI compliant, or move to a hosted checkout (Stripe, Square).
+- **Content rights.** Owner is on board, but get written OK to reuse their text and photos, and get the original photo files.
+- **Domain and hosting.** Someone with access to the domain registrar must point `www` at the new host.
+- **Placeholder data.** The Bonito special price ($120) is a guess. The sample sailings are demo data. The trip and gallery "photos" are color placeholders.

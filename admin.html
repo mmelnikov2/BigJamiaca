@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Big Jamaica Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0b2340;--orange:#ff6a1a;--ink:#14202e;--muted:#5b6b7c;--line:#dbe3ea;--card:#fff;--bg:#f3f6f9;--ok:#1f8a4c;--red:#b42318}
+@media (prefers-color-scheme: dark){:root{--ink:#e8eef4;--muted:#9fb0c1;--line:#24384f;--card:#10233a;--bg:#081627}}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+h1,h2,h3{font-family:Archivo,sans-serif;margin:0 0 .5em}
+header{background:var(--navy);color:#fff;display:flex;align-items:center;gap:16px;padding:0 20px;height:60px;position:sticky;top:0;z-index:5}
+header b{font:900 18px Archivo}
+header a{color:#fff;opacity:.8;font-size:14px;margin-left:auto}
+.tabs{display:flex;gap:4px;padding:12px 20px;background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs button{border:0;background:none;color:var(--ink);font:600 15px Inter;padding:10px 14px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.tabs button.on{background:var(--navy);color:#fff}
+main{max-width:1100px;margin:0 auto;padding:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:16px}
+label{display:block;font-weight:600;font-size:13px;margin:10px 0 4px;color:var(--muted)}
+input,select,textarea{width:100%;font:15px Inter;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.btn{border:0;cursor:pointer;font:700 14px Archivo;padding:10px 16px;border-radius:8px;background:var(--orange);color:#fff}
+.btn.g{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.r{background:transparent;color:var(--red);border:1px solid var(--red)}
+.btn.s{padding:6px 10px;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+td input,td select{padding:6px 8px;font-size:14px}
+.tbl{overflow-x:auto}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ok);color:#fff;padding:12px 20px;border-radius:10px;font-weight:600;opacity:0;transition:.3s;pointer-events:none}
+.toast.on{opacity:1}
+.note{font-size:13px;color:var(--muted)}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.thumbs figure{margin:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+.thumbs img,.thumbs .ph{width:100%;aspect-ratio:4/3;object-fit:cover;display:flex;align-items:center;justify-content:center;background:#1f6f8b;color:#fff;font-size:30px}
+.thumbs figcaption{padding:8px;font-size:13px}
+.drop{border:2px dashed var(--line);border-radius:12px;padding:26px;text-align:center;cursor:pointer}
+.drop:hover{border-color:var(--orange)}
+.hide{display:none!important}
+#login{max-width:380px;margin:80px auto}
+.warn{background:#fff4e5;border-left:4px solid #b54708;padding:10px 14px;border-radius:8px;font-size:13px;color:#5a3300;margin-bottom:16px}
+</style>
+</head>
+<body>
+<header><b>BIG JAMAICA · Admin</b><a href="index.html" target="_blank">View site ↗</a></header>
+
+<div id="login" class="card">
+  <h2>Staff login</h2>
+  <p class="note">Prototype gate. Any password works for the demo: real accounts come with hosting.</p>
+  <label>Email</label><input id="em" type="email" value="staff@example.com">
+  <label>Password</label><input id="pw" type="password" value="demo">
+  <button class="btn" style="margin-top:14px;width:100%" onclick="login()">Log in</button>
+</div>
+
+<div id="app" class="hide">
+<nav class="tabs" id="tabs"></nav>
+<main>
+  <div class="warn">Prototype: changes save to <b>this browser only</b> and show up on the site in this browser. In production they save to the server for everyone. Use <b>Backup</b> to move changes between computers.</div>
+
+  <!-- SCHEDULE -->
+  <section data-tab="schedule">
+    <div class="card">
+      <h2>Add sailings</h2>
+      <div class="row">
+        <div><label>Trip</label><select id="sTrip"></select></div>
+        <div><label>First date</label><input id="sDate" type="date"></div>
+        <div><label>Repeat</label><select id="sRep"><option value="0">Just this date</option><option value="7">Weekly</option><option value="1">Daily</option></select></div>
+        <div><label>Until</label><input id="sUntil" type="date"></div>
+        <div><label>Seats open</label><input id="sLeft" type="number" value="40" min="0"></div>
+        <div><label>Time override</label><input id="sTime" placeholder="optional"></div>
+      </div>
+      <label>Note (shown under the sailing)</label><input id="sNote" placeholder="e.g. Pool fish double this trip">
+      <button class="btn" style="margin-top:12px" onclick="addSailings()">Add to schedule</button>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><h2 style="margin:0">Schedule</h2>
+        <label style="display:flex;gap:6px;align-items:center;margin:0"><input type="checkbox" id="showPast" style="width:auto" onchange="rSched()"> Show past</label></div>
+      <div class="tbl"><table id="schedTbl"></table></div>
+      <p class="note">Tip: set <b>Cancelled</b> for weather. The site shows it right away. Seat counts here are what the site shows; once the booking system shares live counts this updates itself.</p>
+    </div>
+  </section>
+
+  <!-- REPORTS -->
+  <section data-tab="reports" class="hide">
+    <div class="card">
+      <h2 id="rHead">New fishing report</h2>
+      <div class="row"><div><label>Date</label><input id="rDate" type="date"></div><div><label>Species tag</label><input id="rTag" list="tags" placeholder="Sea bass"><datalist id="tags"></datalist></div></div>
+      <label>Title</label><input id="rTitle" placeholder="Limits of sea bass on the wrecks!">
+      <label>Report</label><textarea id="rText" rows="6" placeholder="How was the fishing, pool winner, next trips..."></textarea>
+      <div class="row"><div><label>High hook (optional)</label><input id="rHigh"></div><div><label>Pool winner weight (optional)</label><input id="rPool"></div></div>
+      <label>Photo (optional)</label><input id="rImg" type="file" accept="image/*">
+      <div style="display:flex;gap:8px;margin-top:12px"><button class="btn" onclick="saveReport()">Publish report</button><button class="btn g hide" id="rCancel" onclick="resetReport()">Cancel edit</button></div>
+    </div>
+    <div class="card"><h2>Published</h2><div class="tbl"><table id="repTbl"></table></div></div>
+  </section>
+
+  <!-- PHOTOS -->
+  <section data-tab="photos" class="hide">
+    <div class="card">
+      <h2>Upload photos</h2>
+      <label class="drop" for="pFiles">📷 Tap to choose photos (or drop them here)<br><span class="note">Resized automatically, so phone photos are fine</span></label>
+      <input id="pFiles" type="file" accept="image/*" multiple class="hide" onchange="addPhotos(this.files)">
+      <label>Caption for these photos</label><input id="pCap" placeholder="e.g. Tilefish trip 11/14">
+    </div>
+    <div class="card"><h2>Gallery</h2><p class="note">Newest first. Remove anything you don't want shown.</p><div class="thumbs" id="thumbs"></div></div>
+  </section>
+
+  <!-- TRIPS -->
+  <section data-tab="trips" class="hide">
+    <div class="card">
+      <h2>Trips &amp; prices</h2>
+      <p class="note">Change a price and save. Booking page prices must also be updated in the booking system until the two are connected.</p>
+      <div class="tbl"><table id="tripTbl"></table></div>
+      <button class="btn" style="margin-top:12px" onclick="saveTrips()">Save prices</button>
+    </div>
+  </section>
+
+  <!-- BACKUP -->
+  <section data-tab="backup" class="hide">
+    <div class="card">
+      <h2>Backup &amp; move</h2>
+      <p>Download everything (schedule, reports, photos, prices) as one file, or load a file saved from another computer.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="exportJson()">Download backup</button>
+      <label class="btn g" style="margin:0">Load backup<input type="file" accept=".json" class="hide" onchange="importJson(this.files[0])"></label>
+      <button class="btn r" onclick="if(confirm('Reset all content back to the defaults?')){localStorage.removeItem(KEY);location.reload()}">Reset to defaults</button></div>
+      <p class="note" id="usage"></p>
+    </div>
+  </section>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="content.js"></script>
+<script>
+const KEY="bj_content";
+let C;
+try{C=JSON.parse(localStorage.getItem(KEY)||"null")}catch(e){}
+C=Object.assign(JSON.parse(JSON.stringify(DEFAULT_CONTENT)),C||{});
+const $=s=>document.querySelector(s), fmt=n=>"$"+Number(n).toLocaleString(), esc=x=>String(x??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const today=()=>new Date().toISOString().slice(0,10);
+const trip=id=>C.trips.find(t=>t.id===id);
+function save(msg){
+  try{localStorage.setItem(KEY,JSON.stringify(C));toast(msg||"Saved. Live on the site.")}
+  catch(e){toast("Storage full: remove some photos or download a backup",true)}
+  usage();
+}
+function toast(m,bad){const t=$("#toast");t.textContent=m;t.style.background=bad?"var(--red)":"var(--ok)";t.classList.add("on");setTimeout(()=>t.classList.remove("on"),2200)}
+function usage(){try{const kb=Math.round((localStorage.getItem(KEY)||"").length/1024);$("#usage").textContent=`Using ${kb} KB of about 5,000 KB browser storage (prototype limit).`}catch(e){}}
+function login(){$("#login").classList.add("hide");$("#app").classList.remove("hide");try{sessionStorage.setItem("bj_admin","1")}catch(e){}init()}
+try{if(sessionStorage.getItem("bj_admin"))login()}catch(e){}
+
+const TABS=[["schedule","📅 Schedule"],["reports","📝 Fishing reports"],["photos","📷 Photos"],["trips","💲 Trips & prices"],["backup","💾 Backup"]];
+function tab(k){document.querySelectorAll("[data-tab]").forEach(s=>s.classList.toggle("hide",s.dataset.tab!==k));document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.k===k));try{localStorage.setItem("bj_tab",k)}catch(e){}}
+function init(){
+  $("#tabs").innerHTML=TABS.map(([k,l])=>`<button data-k="${k}" onclick="tab('${k}')">${l}</button>`).join("");
+  let t="schedule";try{t=localStorage.getItem("bj_tab")||t}catch(e){} tab(t);
+  $("#sTrip").innerHTML=C.trips.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join("");
+  $("#sDate").value=today(); $("#rDate").value=today();
+  rSched();rReports();rPhotos();rTrips();usage();
+}
+// ---- schedule
+function addSailings(){
+  const t=$("#sTrip").value,d0=$("#sDate").value,rep=+$("#sRep").value,until=$("#sUntil").value||d0;
+  if(!d0)return toast("Pick a date",true);
+  let d=new Date(d0+"T12:00:00"),end=new Date(until+"T12:00:00"),n=0;
+  do{const iso=d.toISOString().slice(0,10);
+    C.sailings.push({t,d:iso,left:+$("#sLeft").value||0,status:"open",time:$("#sTime").value||undefined,note:$("#sNote").value||undefined});n++;
+    if(!rep)break; d.setDate(d.getDate()+rep);}while(d<=end&&n<200);
+  save(`Added ${n} sailing${n>1?"s":""}`);rSched();
+}
+function rSched(){
+  const past=$("#showPast").checked;
+  const rows=C.sailings.map((s,i)=>({...s,i})).filter(s=>past||s.d>=today()).sort((a,b)=>a.d.localeCompare(b.d));
+  $("#schedTbl").innerHTML=`<tr><th>Date</th><th>Trip</th><th>Seats open</th><th>Status</th><th>Note</th><th></th></tr>`+rows.map(s=>`<tr>
+    <td><input type="date" value="${s.d}" onchange="upd(${s.i},'d',this.value)"></td>
+    <td>${esc(trip(s.t)?.name||s.t)}</td>
+    <td style="width:100px"><input type="number" min="0" value="${s.left}" onchange="upd(${s.i},'left',+this.value)"></td>
+    <td><select onchange="upd(${s.i},'status',this.value)">${[["open","Open"],["soldout","Sold out"],["cancelled","Cancelled"]].map(([v,l])=>`<option value="${v}" ${(s.status||"open")===v?"selected":""}>${l}</option>`).join("")}</select></td>
+    <td><input value="${esc(s.note||"")}" onchange="upd(${s.i},'note',this.value)"></td>
+    <td><button class="btn r s" onclick="if(confirm('Delete this sailing?')){C.sailings.splice(${s.i},1);save('Deleted');rSched()}">Delete</button></td></tr>`).join("")
+    +(rows.length?"":`<tr><td colspan="6" class="note">No upcoming sailings.</td></tr>`);
+}
+function upd(i,k,v){C.sailings[i][k]=v;save();if(k==="d")rSched()}
+// ---- reports
+let editing=null;
+function resizeImg(file,max=1200){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const sc=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*sc;c.height=im.height*sc;c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.78))};im.onerror=rej;im.src=r.result};r.onerror=rej;r.readAsDataURL(file)})}
+async function saveReport(){
+  const t=$("#rTitle").value.trim(); if(!t)return toast("Add a title",true);
+  const r=editing!==null?C.reports[editing]:{};
+  Object.assign(r,{d:$("#rDate").value||today(),tag:$("#rTag").value||"Report",t,x:$("#rText").value,s:{}});
+  if($("#rHigh").value)r.s["High hook"]=$("#rHigh").value; if($("#rPool").value)r.s["Pool"]=$("#rPool").value;
+  const f=$("#rImg").files[0]; if(f)r.img=await resizeImg(f);
+  if(editing===null)C.reports.push(r);
+  save(editing===null?"Report published":"Report updated");resetReport();rReports();
+}
+function editReport(i){const r=C.reports[i];editing=i;$("#rHead").textContent="Edit report";$("#rDate").value=r.d;$("#rTag").value=r.tag;$("#rTitle").value=r.t;$("#rText").value=r.x;$("#rHigh").value=r.s?.["High hook"]||"";$("#rPool").value=r.s?.["Pool"]||"";$("#rCancel").classList.remove("hide");window.scrollTo(0,0)}
+function resetReport(){editing=null;$("#rHead").textContent="New fishing report";["rTitle","rText","rHigh","rPool","rTag"].forEach(id=>$("#"+id).value="");$("#rImg").value="";$("#rDate").value=today();$("#rCancel").classList.add("hide")}
+function rReports(){
+  $("#tags").innerHTML=[...new Set(C.reports.map(r=>r.tag))].map(t=>`<option value="${esc(t)}">`).join("");
+  $("#repTbl").innerHTML=`<tr><th>Date</th><th>Title</th><th>Tag</th><th>Photo</th><th></th></tr>`+C.reports.map((r,i)=>({...r,i})).sort((a,b)=>b.d.localeCompare(a.d)).map(r=>`<tr><td>${r.d}</td><td>${esc(r.t)}</td><td>${esc(r.tag)}</td><td>${r.img?"✓":""}</td>
+   <td style="white-space:nowrap"><button class="btn g s" onclick="editReport(${r.i})">Edit</button> <button class="btn r s" onclick="if(confirm('Delete this report?')){C.reports.splice(${r.i},1);save('Deleted');rReports()}">Delete</button></td></tr>`).join("");
+}
+// ---- photos
+async function addPhotos(files){
+  const cap=$("#pCap").value;let n=0;
+  for(const f of files){try{C.photos.unshift({src:await resizeImg(f),cap:cap||f.name.replace(/\.[^.]+$/,""),d:today()});n++}catch(e){}}
+  $("#pFiles").value="";save(`Added ${n} photo${n>1?"s":""}`);rPhotos();
+}
+const drop=document.querySelector(".drop");
+drop.addEventListener("dragover",e=>{e.preventDefault()});drop.addEventListener("drop",e=>{e.preventDefault();addPhotos(e.dataTransfer.files)});
+function rPhotos(){
+  $("#thumbs").innerHTML=C.photos.map((p,i)=>`<figure>${p.src?`<img src="${p.src}" alt="">`:`<div class="ph">🐟</div>`}<figcaption><input value="${esc(p.cap)}" onchange="C.photos[${i}].cap=this.value;save()"><div style="display:flex;justify-content:space-between;margin-top:6px"><span class="note">${p.d||""}</span><button class="btn r s" onclick="C.photos.splice(${i},1);save('Removed');rPhotos()">Remove</button></div></figcaption></figure>`).join("")||'<p class="note">No photos yet.</p>';
+}
+// ---- trips
+function rTrips(){
+  $("#tripTbl").innerHTML=`<tr><th>Trip</th><th>Time</th><th>Prices</th><th>Rod</th><th>Bunk</th></tr>`+C.trips.map((t,i)=>`<tr>
+   <td><input value="${esc(t.name)}" data-i="${i}" data-k="name"></td>
+   <td><input value="${esc(t.time)}" data-i="${i}" data-k="time"></td>
+   <td>${Object.entries(t.prices).map(([k,v])=>`<div style="display:flex;gap:6px;align-items:center;margin:2px 0"><span class="note" style="width:110px">${esc(k)}</span><input type="number" value="${v}" data-i="${i}" data-p="${esc(k)}" style="width:90px"></div>`).join("")}</td>
+   <td style="width:80px"><input type="number" value="${t.rod}" data-i="${i}" data-k="rod"></td>
+   <td style="width:80px"><input type="number" value="${t.bunk}" data-i="${i}" data-k="bunk"></td></tr>`).join("");
+}
+function saveTrips(){
+  document.querySelectorAll("#tripTbl input").forEach(el=>{const t=C.trips[el.dataset.i];
+    if(el.dataset.p)t.prices[el.dataset.p]=+el.value; else t[el.dataset.k]=el.type==="number"?+el.value:el.value});
+  save("Prices saved");
+}
+// ---- backup
+function exportJson(){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(C,null,1)],{type:"application/json"}));a.download=`bigjamaica-content-${today()}.json`;a.click()}
+function importJson(f){if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.trips||!d.sailings)throw 0;C=d;save("Backup loaded");init()}catch(e){toast("That file isn't a valid backup",true)}};r.readAsText(f)}
+</script>
+</body>
+</html>

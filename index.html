@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Big Jamaica (redesign prototype)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0b2340; --navy-2:#12345c; --sea:#1f6f8b; --foam:#e8f3f6;
+  --orange:#ff6a1a; --orange-d:#e2550a; --sand:#f6f1e7;
+  --ink:#14202e; --muted:#5b6b7c; --line:#dbe3ea; --card:#fff; --bg:#fbfcfd;
+  --ok:#1f8a4c; --warn:#b54708;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --ink:#e8eef4; --muted:#9fb0c1; --line:#24384f; --card:#10233a; --bg:#081627; --foam:#0f2a40; --sand:#132b44; }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55}
+h1,h2,h3,h4{font-family:Archivo,Inter,sans-serif;line-height:1.1;margin:0 0 .5em}
+a{color:inherit}
+.wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+.proto{background:#fff4d6;color:#5a4300;font-size:13px;text-align:center;padding:6px 12px}
+/* header */
+header.top{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+.top .wrap{display:flex;align-items:center;gap:14px;height:68px}
+.logo{font-family:Archivo;font-weight:900;font-size:22px;letter-spacing:.5px;text-decoration:none;display:flex;align-items:center;gap:10px}
+.logo small{display:block;font-size:10px;font-weight:600;letter-spacing:1.5px;opacity:.7}
+nav.main{display:flex;gap:4px;margin-left:auto}
+nav.main a{text-decoration:none;padding:8px 10px;border-radius:8px;font-weight:600;font-size:14px;opacity:.9;white-space:nowrap}
+.logo span,.top .btn-o{white-space:nowrap}
+nav.main a:hover,nav.main a.on{background:rgba(255,255,255,.1);opacity:1}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;font:700 15px Archivo,sans-serif;letter-spacing:.3px;padding:12px 20px;border-radius:10px;text-decoration:none;transition:.15s}
+.btn-o{background:var(--orange);color:#fff}.btn-o:hover{background:var(--orange-d)}
+.btn-g{background:transparent;color:inherit;border:2px solid currentColor}
+.btn-s{padding:8px 14px;font-size:14px}
+.burger{display:none;margin-left:auto;background:none;border:0;color:#fff;font-size:26px}
+@media(max-width:1180px){
+  nav.main{display:none;position:absolute;top:68px;left:0;right:0;background:var(--navy);flex-direction:column;padding:10px 20px 20px}
+  nav.main.open{display:flex}
+  .burger{display:block}
+}
+@media(max-width:700px){
+  .top .btn-o{display:none}
+}
+/* hero */
+.hero{position:relative;color:#fff;background:linear-gradient(180deg,#0b2340 0%,#12345c 55%,#1f6f8b 100%);overflow:hidden}
+.hero .wrap{position:relative;z-index:2;padding:80px 20px 150px}
+.hero h1{font-size:clamp(38px,6vw,72px);font-weight:900;max-width:820px}
+.hero h1 span{color:var(--orange)}
+.hero p.lead{font-size:20px;max-width:640px;opacity:.92}
+.hero .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+.facts{display:flex;gap:28px;flex-wrap:wrap;margin-top:40px;font-size:14px;opacity:.9}
+.facts b{display:block;font:800 26px Archivo}
+.waves{position:absolute;left:0;right:0;bottom:-2px;z-index:1}
+/* sections */
+section{padding:64px 0}
+.eyebrow{font:700 13px Archivo;letter-spacing:2px;text-transform:uppercase;color:var(--orange)}
+.sec-h{display:flex;align-items:end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:24px}
+.sec-h h2{font-size:clamp(28px,4vw,40px);margin:4px 0 0}
+.grid{display:grid;gap:18px}
+.g3{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+/* sailings strip */
+.sailings{margin-top:-90px;position:relative;z-index:3}
+.sail{display:flex;gap:14px;align-items:center}
+.date{flex:none;width:64px;text-align:center;background:var(--navy);color:#fff;border-radius:10px;padding:8px 0}
+.date b{display:block;font:900 26px Archivo;line-height:1}
+.date span{font-size:12px;letter-spacing:1px;text-transform:uppercase;opacity:.8}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 9px;border-radius:99px;background:var(--foam);color:var(--sea)}
+.pill.hot{background:#ffe6d6;color:var(--orange-d)}
+.pill.ok{background:#dcf3e5;color:var(--ok)}
+/* trips */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:99px;cursor:pointer;font:600 14px Inter}
+.chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.trip{display:flex;flex-direction:column;padding:0;overflow:hidden}
+.trip .art{height:120px;position:relative;display:flex;align-items:end;padding:14px 18px;color:#fff}
+.trip .art h3{font-size:21px;margin:0;text-shadow:0 1px 6px rgba(0,0,0,.3)}
+.trip .body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
+.meta{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+.price{font:900 30px Archivo}.price small{font:500 14px Inter;color:var(--muted)}
+.trip .foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:10px}
+/* table */
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line)}
+th{font:700 13px Archivo;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.tbl{overflow-x:auto}
+/* booking */
+.steps{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+.steps div{flex:1;min-width:90px;padding:8px 10px;border-radius:8px;background:var(--foam);font-size:13px;font-weight:600;color:var(--muted)}
+.steps div.on{background:var(--navy);color:#fff}
+.steps div.done{background:#dcf3e5;color:var(--ok)}
+.book{display:grid;grid-template-columns:1fr 340px;gap:22px;align-items:start}
+@media(max-width:900px){.book{grid-template-columns:1fr}}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;background:var(--card)}
+.opt.sel{border-color:var(--orange);box-shadow:0 0 0 2px var(--orange) inset}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:18px;cursor:pointer}
+.qty b{width:24px;text-align:center}
+label.f{display:block;font-weight:600;font-size:14px;margin:12px 0 4px}
+input,select,textarea{width:100%;font:15px Inter;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sum{position:sticky;top:90px}
+.sum .line{display:flex;justify-content:space-between;padding:6px 0;font-size:15px}
+.sum .tot{border-top:2px solid var(--line);margin-top:8px;padding-top:10px;font:800 20px Archivo}
+.note{font-size:13px;color:var(--muted)}
+.alert{border-left:4px solid var(--warn);background:#fff4e5;color:#5a3300;padding:12px 14px;border-radius:8px;font-size:14px}
+@media (prefers-color-scheme: dark){.alert{background:#3a2512;color:#ffd9b3}}
+/* reports */
+.report{display:grid;grid-template-columns:120px 1fr;gap:18px}
+.report .ph{border-radius:10px;min-height:100px}
+.stat{display:inline-block;margin-right:16px;font-size:13px;color:var(--muted)}.stat b{display:block;font:800 20px Archivo;color:var(--ink)}
+/* faq */
+details{border-bottom:1px solid var(--line);padding:14px 0}
+summary{cursor:pointer;font-weight:700;font-size:17px;list-style:none;display:flex;justify-content:space-between}
+summary::after{content:"+";font-size:22px;color:var(--orange)}
+details[open] summary::after{content:"–"}
+/* footer */
+footer{background:var(--navy);color:#cfe0ee;padding:50px 0 30px;font-size:14px}
+footer h4{color:#fff;font-size:15px;letter-spacing:1px;text-transform:uppercase}
+footer a{display:block;text-decoration:none;padding:3px 0;opacity:.85}
+footer a:hover{opacity:1;color:#fff}
+.mob-cta{display:none}
+@media(max-width:700px){
+  .mob-cta{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:30;gap:8px;padding:10px;background:var(--navy)}
+  .mob-cta a{flex:1;justify-content:center}
+  body{padding-bottom:70px}
+  .report{grid-template-columns:1fr}
+  .row2{grid-template-columns:1fr}
+}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.gal figure{margin:0;border-radius:12px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:zoom-in}
+.gal img,.gal .phd{width:100%;aspect-ratio:4/3;object-fit:cover;display:flex;align-items:center;justify-content:center;font-size:48px}
+.gal figcaption{padding:10px 12px;font-size:14px;display:flex;justify-content:space-between;gap:8px}.gal figcaption span{color:var(--muted)}
+.lb{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;color:#fff}
+.lb img{max-width:100%;max-height:80vh;border-radius:8px}
+.page{display:none}.page.on{display:block}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+<div class="proto">Redesign prototype for review. Not the official site. "Reserve" buttons open the current live booking system. Forms here are demos.</div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="16" fill="#ff6a1a"/><path d="M6 20c3 0 3-2 5.5-2S14 20 17 20s3-2 5.5-2S25 20 28 20v3c-3 0-3-2-5.5-2S20 23 17 23s-3-2-5.5-2S9 23 6 23z" fill="#fff"/><path d="M10 17l3-7h8l3 7z" fill="#0b2340"/></svg>
+      <span>BIG JAMAICA<small>125' PARTY FISHING · BRIELLE NJ</small></span>
+    </a>
+    <button class="burger" aria-label="Menu" onclick="document.querySelector('nav.main').classList.toggle('open')">☰</button>
+    <nav class="main">
+      <a href="#trips">Trips &amp; Prices</a>
+      <a href="#reports">Fishing Reports</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#charters">Private Charters</a>
+      <a href="#visit">Plan Your Trip</a>
+      <a href="#gift">Gift Cards</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="btn btn-o btn-s" href="#book">Book Now</a>
+  </div>
+</header>
+
+<!-- ========== HOME ========== -->
+<main>
+<div class="page" id="p-home">
+  <div class="hero">
+    <div class="wrap">
+      <div class="eyebrow" style="color:#ffb48a">Sailing from Bogan's Basin, Brielle NJ</div>
+      <h1>New Jersey's big boat for <span>serious fishing.</span></h1>
+      <p class="lead">Sea bass, bluefish, tuna, tilefish and stripers. Walk on with your cooler, we bring the bait, the rods and 125 feet of stable deck.</p>
+      <div class="cta">
+        <a class="btn btn-o" href="#book">See next sailings &amp; book</a>
+        <a class="btn btn-g" href="#trips">Compare trips</a>
+      </div>
+      <div class="facts">
+        <div><b>125'</b>stable, heated cabin</div>
+        <div><b>from $75</b>per person</div>
+        <div><b>Bait</b>included on every trip</div>
+        <div><b>Bunks</b>on overnight trips</div>
+      </div>
+    </div>
+    <svg class="waves" viewBox="0 0 1440 140" preserveAspectRatio="none" height="140" width="100%"><path fill="var(--bg)" d="M0 70c120-30 240-30 360 0s240 30 360 0 240-30 360 0 240 30 360 0v70H0z"/><path fill="var(--bg)" opacity=".5" d="M0 50c120 30 240 30 360 0s240-30 360 0 240 30 360 0 240-30 360 0v90H0z"/></svg>
+  </div>
+
+  <div class="wrap sailings">
+    <div class="card">
+      <div class="sec-h" style="margin-bottom:10px"><h3 style="margin:0">Next sailings</h3><a href="#book" class="note">Full calendar →</a></div>
+      <div class="grid g3" id="nextSailings"></div>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <div class="sec-h"><div><div class="eyebrow">What's biting</div><h2>Pick your trip</h2></div><a class="btn btn-g btn-s" href="#trips">All trips &amp; prices</a></div>
+      <div class="grid g3" id="homeTrips"></div>
+    </div>
+  </section>
+
+  <section style="background:var(--sand)">
+    <div class="wrap grid g2" style="align-items:center">
+      <div>
+        <div class="eyebrow">Latest report</div>
+        <h2 id="latestTitle"></h2>
+        <p id="latestText"></p>
+        <a class="btn btn-o btn-s" href="#reports">Read all reports</a>
+      </div>
+      <div class="card">
+        <h3>First time on a party boat?</h3>
+        <ol style="padding-left:18px;margin:0">
+          <li>Reserve a spot online (offshore trips must be booked ahead).</li>
+          <li>Arrive 1 to 1.5 hours early. Boarding goes in reservation order.</li>
+          <li>Bring a cooler, ice, food, layers and <b>cash</b> for the mate's tip and fish cleaning.</li>
+          <li>Fish. The crew helps with rigs, tangles and gaffing.</li>
+        </ol>
+        <p style="margin:14px 0 0"><a href="#visit">What to bring &amp; FAQ →</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap grid g2">
+      <div class="card"><div class="eyebrow">Groups &amp; companies</div><h3>Charter the whole boat</h3><p>Up to 75 people on weekends. Company outings, bachelor parties, canyon tuna for your crew.</p><a href="#charters" class="btn btn-o btn-s">Charter prices</a></div>
+      <div class="card"><div class="eyebrow">Give a day on the water</div><h3>Gift cards, any amount</h3><p>Delivered by email instantly. Good toward any trip or charter.</p><a href="#gift" class="btn btn-o btn-s">Buy a gift card</a></div>
+    </div>
+  </section>
+</div>
+
+<!-- ========== TRIPS ========== -->
+<div class="page" id="p-trips">
+  <section><div class="wrap">
+    <div class="eyebrow">Trips &amp; prices</div><h2 style="font-size:40px">Every trip, every price, one page.</h2>
+    <p class="note" style="max-width:700px">Prices are per person. Bait is included. Rod rentals, bunks, fish cleaning and the mate's tip are extra. Hit "Real cost" to see what a day actually runs.</p>
+    <div class="filters" id="filters"></div>
+    <div class="grid g3" id="allTrips"></div>
+  </div></section>
+</div>
+
+<!-- ========== TRIP DETAIL ========== -->
+<div class="page" id="p-trip"><section><div class="wrap" id="tripDetail"></div></section></div>
+
+<!-- ========== BOOK / SCHEDULE ========== -->
+<div class="page" id="p-book">
+  <section><div class="wrap">
+    <div class="sec-h"><div><div class="eyebrow">Schedule &amp; booking</div><h2 style="font-size:40px">Upcoming sailings</h2></div>
+    <a class="btn btn-g btn-s" href="tel:7325285014">Questions? (732) 528-5014</a></div>
+    <p class="note" style="max-width:720px">Pick a sailing and you'll go to our secure reservation system to choose tickets, rods and bunks and pay. Offshore trips are paid in full at booking and are non-refundable unless the captain cancels.</p>
+    <div class="filters" id="bookFilters"></div>
+    <div id="schedule"></div>
+  </div></section>
+</div>
+
+<!-- ========== GALLERY ========== -->
+<div class="page" id="p-gallery">
+  <section><div class="wrap">
+    <div class="sec-h"><div><div class="eyebrow">Photo gallery</div><h2 style="font-size:40px">Recent catches</h2></div></div>
+    <div class="gal" id="gallery"></div>
+  </div></section>
+</div>
+<div id="lb" class="lb hide" onclick="this.classList.add('hide')"><img id="lbImg" alt=""><p id="lbCap"></p></div>
+
+<!-- ========== REPORTS ========== -->
+<div class="page" id="p-reports">
+  <section><div class="wrap" style="max-width:860px">
+    <div class="sec-h"><div><div class="eyebrow">From the wheelhouse</div><h2>Fishing reports</h2></div>
+      <form onsubmit="event.preventDefault();this.innerHTML='<span class=pill.ok>Subscribed (demo)</span>'" style="display:flex;gap:8px"><input type="email" placeholder="Email for report alerts" required style="width:230px"><button class="btn btn-o btn-s">Subscribe</button></form></div>
+    <div class="filters" id="repFilters"></div>
+    <div id="reportList" class="grid"></div>
+  </div></section>
+</div>
+
+<!-- ========== CHARTERS ========== -->
+<div class="page" id="p-charters">
+  <section><div class="wrap">
+    <div class="eyebrow">Private charters</div><h2 style="font-size:40px">The whole boat, your group.</h2>
+    <div class="grid g2" style="margin-bottom:24px">
+      <div class="card">
+        <h3>Price estimator</h3>
+        <label class="f">Charter type</label><select id="chType"></select>
+        <label class="f">Group size</label><input id="chSize" type="number" min="1" value="30">
+        <div id="chOut" style="margin-top:16px"></div>
+      </div>
+      <div class="card">
+        <h3>Request a date</h3>
+        <form onsubmit="event.preventDefault();this.innerHTML='<p class=pill.ok>Request sent (demo). The office replies within 1 business day.</p>'">
+          <div class="row2"><div><label class="f">Name</label><input required></div><div><label class="f">Phone</label><input required></div></div>
+          <label class="f">Email</label><input type="email" required>
+          <div class="row2"><div><label class="f">Preferred date</label><input type="date"></div><div><label class="f">Group size</label><input type="number" min="1"></div></div>
+          <label class="f">Occasion / notes</label><textarea rows="3"></textarea>
+          <button class="btn btn-o" style="margin-top:12px">Send request</button>
+        </form>
+      </div>
+    </div>
+    <div class="card tbl"><table id="chTable"></table>
+      <p class="note">Rods and tackle included on day charters; tuna rod rental $30 on canyon trips. Bunk fee waived for charters. Weekend charters: $3,500 deposit, balance due 15 days before. Crew gratuity not included (15 to 20% suggested). Prices subject to change.</p></div>
+  </div></section>
+</div>
+
+<!-- ========== VISIT / FAQ ========== -->
+<div class="page" id="p-visit">
+  <section><div class="wrap grid g2" style="align-items:start">
+    <div>
+      <div class="eyebrow">Plan your trip</div><h2 style="font-size:40px">Know before you go</h2>
+      <details open><summary>What should I bring?</summary><p>A cooler up to 100 qt for your catch, a small one for food and drinks, ice (sold at the dock and tackle shop), layers and foul-weather gear. Bring your own rod and tackle or rent on board.</p></details>
+      <details><summary>Bring cash. Seriously.</summary><p>Tips, fish cleaning, ice and the snack bar are cash only and there is no ATM nearby.</p></details>
+      <details><summary>How much should I tip the mate?</summary><p>Tip on how helpful the crew was, not how many fish you caught. 15 to 20% of your fare is typical.</p></details>
+      <details><summary>Can you clean my fish?</summary><p>Yes. The crew cleans, fillets and bags your catch for a small fee.</p></details>
+      <details><summary>Food and drinks?</summary><p>Snack bar with chips, sodas, water and microwavable food. Coolers welcome. Cans only, no glass. No hard alcohol; beer limited to one six-pack per adult.</p></details>
+      <details><summary>When do I board?</summary><p>Day trips board up to 1.5 hours early, offshore trips 1 hour early, in reservation order.</p></details>
+      <details><summary>What if the weather is bad?</summary><p>The boat sails in the rain. Only the captain cancels, and you'll get a call and email if so. Don't assume a cancellation.</p></details>
+      <details><summary>Anything not allowed?</summary><p>GPS and tracking devices are prohibited. On tuna trips, braid is for jigging only; if you bait-fish with braid you need a 200-yard mono top-shot.</p></details>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h3>Getting here</h3>
+        <p><b>Bogan's Deep Sea Fishing Center</b><br>800 Ashley Ave, Brielle, NJ 08730<br>Free parking at the dock lot. Tackle shop on site.</p>
+        <div style="height:200px;border-radius:10px;background:linear-gradient(135deg,var(--foam),var(--sand));display:flex;align-items:center;justify-content:center" class="note">[ Embedded Google Map ]</div>
+        <p><a class="btn btn-o btn-s" href="https://maps.app.goo.gl/B7WVrarUCGvnciou7" target="_blank" rel="noopener">Open in Google Maps</a></p>
+      </div>
+      <div class="card"><h3>Staying overnight?</h3><p class="note">Nearby hotels list goes here (content from the current Directions/Hotels page, pending).</p></div>
+      <div class="card" id="policies"><h3>Policies, in plain English</h3>
+        <ul style="padding-left:18px;margin:0">
+          <li>Offshore trips are paid in full when you book.</li>
+          <li><b>No refunds</b> unless the captain cancels. Then you choose refund, credit or reschedule.</li>
+          <li>Can't make it? Tell the office early. If your seat resells, you get store credit.</li>
+          <li>No-shows forfeit the full payment.</li>
+        </ul>
+        <p class="note">Full text: Terms &amp; Conditions · Cancellation Policy · Trip Reservation Policy · Privacy Policy</p>
+      </div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ========== GIFT ========== -->
+<div class="page" id="p-gift">
+  <section><div class="wrap grid g2" style="align-items:start">
+    <div>
+      <div class="eyebrow">Gift cards</div><h2 style="font-size:40px">Give a day on the water</h2>
+      <p>Any amount, good toward any trip or charter. Sent by email to you or straight to the lucky angler.</p>
+      <div class="filters" id="giftAmts"></div>
+      <label class="f">Or a custom amount ($)</label><input id="giftCustom" type="number" min="10" value="99">
+      <div class="row2"><div><label class="f">Your name</label><input></div><div><label class="f">Your email</label><input type="email"></div></div>
+      <div class="row2"><div><label class="f">Recipient name</label><input></div><div><label class="f">Recipient email</label><input type="email"></div></div>
+      <label class="f">Message</label><textarea rows="2" placeholder="Happy birthday, go get 'em!"></textarea>
+      <label class="f">Deliver to</label><select><option>Email to recipient</option><option>Email to me (I'll print it)</option><option>Mail a physical card</option></select>
+      <button class="btn btn-o" style="margin-top:14px" onclick="window.open('https://www.bigjamaica.com/giftcertificate','_blank')">Continue to secure checkout</button>
+      <p class="note">Prototype: opens the current gift certificate order page. See handoff notes about card security.</p>
+    </div>
+    <div class="card" style="background:linear-gradient(135deg,var(--navy),var(--sea));color:#fff;min-height:240px;display:flex;flex-direction:column;justify-content:space-between">
+      <div style="font:900 22px Archivo">BIG JAMAICA</div>
+      <div><div class="note" style="color:#cfe0ee">Gift card</div><div id="giftShow" style="font:900 54px Archivo">$99</div></div>
+      <div class="note" style="color:#cfe0ee">Good toward any trip or charter</div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ========== CONTACT ========== -->
+<div class="page" id="p-contact">
+  <section><div class="wrap grid g2" style="align-items:start">
+    <div>
+      <div class="eyebrow">Contact</div><h2 style="font-size:40px">Talk to the office</h2>
+      <p style="font-size:22px;font-weight:700"><a href="tel:7325285014">(732) 528-5014</a></p>
+      <p><a href="mailto:fish@bigjamaica.com">fish@bigjamaica.com</a></p>
+      <table style="max-width:360px"><tr><td>Mon to Sat</td><td>9:00 am to 5:00 pm</td></tr><tr><td>Sunday</td><td>10:00 am to 4:00 pm</td></tr></table>
+      <p><b>Dock:</b> 800 Ashley Ave, Brielle, NJ 08730<br><b>Mail:</b> P.O. Box 307, Brielle, NJ 08730</p>
+    </div>
+    <div class="card">
+      <form onsubmit="event.preventDefault();this.innerHTML='<p>Thanks! Message sent (demo).</p>'">
+        <div class="row2"><div><label class="f">Name *</label><input required></div><div><label class="f">Phone *</label><input required></div></div>
+        <label class="f">Email *</label><input type="email" required>
+        <label class="f">Message *</label><textarea rows="4" required></textarea>
+        <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-size:14px"><input type="checkbox" style="width:auto" checked> Send me the email blast (reports &amp; special trips)</label>
+        <button class="btn btn-o" style="margin-top:12px">Send</button>
+      </form>
+    </div>
+  </div></section>
+</div>
+</main>
+
+<footer>
+  <div class="wrap grid g3" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
+    <div><div style="font:900 22px Archivo;color:#fff">BIG JAMAICA</div><p>125' party fishing boat<br>Bogan's Basin, Brielle NJ</p><p><a href="tel:7325285014">(732) 528-5014</a></p></div>
+    <div><h4>Fish</h4><a href="#trips">Trips &amp; Prices</a><a href="#book">Schedule &amp; Book</a><a href="#reports">Fishing Reports</a><a href="#gallery">Gallery</a><a href="#charters">Private Charters</a><a href="#gift">Gift Cards</a></div>
+    <div><h4>Info</h4><a href="#visit">FAQ &amp; Directions</a><a href="#visit">Policies</a><a href="#contact">Contact</a><a href="admin.html">Staff login</a><a href="https://wreckmasters.com/" target="_blank" rel="noopener">Sister boat: 100' Paramount ↗</a></div>
+    <div><h4>Follow</h4><a href="https://www.facebook.com/TheBigJamaica/" target="_blank" rel="noopener">Facebook</a><a href="https://www.instagram.com/thebigjamaica/" target="_blank" rel="noopener">Instagram</a></div>
+  </div>
+</footer>
+<div class="mob-cta"><a class="btn btn-g btn-s" style="color:#fff" href="tel:7325285014">Call</a><a class="btn btn-o btn-s" href="#book">Schedule &amp; Book</a></div>
+
+<script src="content.js"></script>
+<script>
+// Content: defaults from content.js, overridden by admin saves
+const D=JSON.parse(JSON.stringify(window.DEFAULT_CONTENT));
+let TRIPS=D.trips,SAILINGS=D.sailings,REPORTS=D.reports,CHARTERS=D.charters,PHOTOS=D.photos;
+// Content saved from admin.html (prototype: browser storage; production: CMS/API)
+try{const c=JSON.parse(localStorage.getItem("bj_content")||"null");if(c){if(c.trips)TRIPS=c.trips;if(c.sailings)SAILINGS=c.sailings;if(c.reports)REPORTS=c.reports;if(c.photos)PHOTOS=c.photos;if(c.charters)CHARTERS=c.charters;}}catch(e){}
+const $=s=>document.querySelector(s), fmt=n=>"$"+n.toLocaleString();
+const byId=id=>TRIPS.find(t=>t.id===id);
+const fromPrice=t=>Math.min(...Object.values(t.prices));
+const dt=s=>new Date(s+"T12:00:00");
+const art=t=>`background:linear-gradient(135deg,${t.c[0]},${t.c[1]})`;
+
+function tripCard(t){
+  const sail=SAILINGS.filter(s=>s.t===t.id);
+  return `<div class="card trip"><div class="art" style="${art(t)}"><h3>${t.name}</h3></div>
+  <div class="body">
+   <div class="meta"><span>⏱ ${t.hrs} hrs</span><span>🕑 ${t.time}</span></div>
+   <div class="meta"><span>📅 ${t.season}</span></div>
+   <div>${t.species.map(s=>`<span class="pill">${s}</span>`).join(" ")} ${t.hot?'<span class="pill hot">Limited</span>':''}</div>
+   <div class="foot"><div class="price">${fmt(t.prices.Adult)}<small> /adult</small></div>
+   <div style="display:flex;gap:6px"><a class="btn btn-g btn-s" href="#trip/${t.id}">Details</a>${sail.length?`<a class="btn btn-o btn-s" href="#book/${t.id}">Dates</a>`:''}</div></div>
+  </div></div>`;
+}
+function realCost(t){ const f=t.prices.Adult, tip=Math.round(f*.18); const clean=t.cat==="special"&&t.id==="j4"?0:10;
+  return {f,rod:t.rod,bunk:t.bunk,tip,clean,ice:t.id==="j4"?0:8,tot:f+t.rod+t.bunk+tip+clean+(t.id==="j4"?0:8)}; }
+
+// ---------- HOME ----------
+function renderHome(){
+  $("#nextSailings").innerHTML=SAILINGS.filter(s=>s.status!=='cancelled'&&s.d>=new Date().toISOString().slice(0,10)).slice().sort((a,b)=>a.d.localeCompare(b.d)).slice(0,6).map(s=>{const t=byId(s.t),d=dt(s.d);
+   return `<a class="sail" href="#book/${t.id}" style="text-decoration:none"><div class="date"><span>${d.toLocaleString('en-US',{month:'short'})}</span><b>${d.getDate()}</b><span>${d.toLocaleString('en-US',{weekday:'short'})}</span></div>
+   <div><b>${t.name}</b><div class="note">${t.time} · ${fmt(t.prices.Adult)}</div>${seatPill(s)}</div></a>`}).join("");
+  $("#homeTrips").innerHTML=["midrange","overnight-sb","thanks"].map(id=>tripCard(byId(id))).join("");
+  const lr=REPORTS.slice().sort((a,b)=>b.d.localeCompare(a.d))[0]||{t:'',x:''};$("#latestTitle").textContent=lr.t; $("#latestText").textContent=lr.x;
+}
+// ---------- TRIPS ----------
+let tf="all";
+function renderTrips(){
+  const cats=[["all","All trips"],["day","Day trips"],["offshore","Offshore & overnight"],["special","Specials & holidays"]];
+  $("#filters").innerHTML=cats.map(([k,l])=>`<button class="chip ${tf===k?'on':''}" onclick="tf='${k}';renderTrips()">${l}</button>`).join("");
+  $("#allTrips").innerHTML=TRIPS.filter(t=>tf==="all"||t.cat===tf).map(tripCard).join("");
+}
+function renderTrip(id){
+  const t=byId(id); if(!t){location.hash="#trips";return}
+  const rc=realCost(t), sail=SAILINGS.filter(s=>s.t===id);
+  const bar=(l,v,c)=>`<div style="display:flex;align-items:center;gap:10px;font-size:14px;margin:4px 0"><span style="width:110px">${l}</span><div style="height:14px;border-radius:4px;background:${c};width:${Math.max(4,v/rc.tot*100*2.2)}px"></div><b>${fmt(v)}</b></div>`;
+  $("#tripDetail").innerHTML=`<a href="#trips" class="note">← All trips</a>
+  <div class="card" style="padding:0;overflow:hidden;margin-top:10px"><div class="art" style="${art(t)};height:180px;display:flex;align-items:end;padding:24px;color:#fff"><h1 style="font-size:44px;margin:0">${t.name}</h1></div></div>
+  <div class="grid g2" style="margin-top:20px;align-items:start">
+   <div class="card"><h3>Trip facts</h3><table>
+    <tr><td>Departs / returns</td><td><b>${t.time}</b></td></tr><tr><td>Length</td><td>${t.hrs} hours</td></tr><tr><td>Season</td><td>${t.season}</td></tr><tr><td>Targets</td><td>${t.species.join(", ")}</td></tr>
+    ${Object.entries(t.prices).map(([k,v])=>`<tr><td>${k}</td><td><b>${fmt(v)}</b></td></tr>`).join("")}
+    ${t.rod?`<tr><td>Rod rental</td><td>${fmt(t.rod)}</td></tr>`:''}${t.bunk?`<tr><td>Bunk</td><td>${fmt(t.bunk)} (limited)</td></tr>`:''}
+   </table><p class="note">${t.note} Bait included. Bring cash for tips, cleaning and ice.</p></div>
+   <div class="card"><h3>Real cost for one adult</h3><p class="note">No surprises at the dock. Estimate with rental rod${t.bunk?', bunk':''}, 18% tip, cleaning and ice.</p>
+    ${bar("Fare",rc.f,"var(--navy)")}${rc.rod?bar("Rod rental",rc.rod,"var(--sea)"):''}${rc.bunk?bar("Bunk",rc.bunk,"var(--sea)"):''}${bar("Mate's tip*",rc.tip,"var(--orange)")}${rc.clean?bar("Fish cleaning*",rc.clean,"var(--orange)"):''}${rc.ice?bar("Ice*",rc.ice,"var(--orange)"):''}
+    <div style="border-top:2px solid var(--line);margin-top:10px;padding-top:10px;font:800 22px Archivo">≈ ${fmt(rc.tot)}</div><p class="note">* cash on board</p>
+    ${sail.length?`<a class="btn btn-o" href="#book/${t.id}">Pick a date (${sail.length} open)</a>`:`<p class="pill">No dates posted yet. Call (732) 528-5014.</p>`}
+   </div></div>`;
+}
+// ---------- SCHEDULE -> existing booking system ----------
+const BOOK_BASE="https://www.bigjamaica.com/booknow";
+const bookHref=t=>t.bookUrl?BOOK_BASE+"/"+t.bookUrl:BOOK_BASE;
+let bf="all";
+function seatPill(s){
+  if(s.status==="cancelled")return '<span class="pill" style="background:#fde2e2;color:#a11">Cancelled</span>';
+  if(s.status==="soldout"||s.left<=0)return '<span class="pill">Sold out</span>';
+  return s.left<10?`<span class="pill hot">Only ${s.left} left</span>`:`<span class="pill ok">${s.left} open</span>`;
+}
+function renderBook(only){
+  if(only)bf=only;
+  const ids=[...new Set(SAILINGS.map(s=>s.t))];
+  $("#bookFilters").innerHTML=[`<button class="chip ${bf==='all'?'on':''}" onclick="renderBook('all')">All</button>`,...ids.map(id=>`<button class="chip ${bf===id?'on':''}" onclick="renderBook('${id}')">${byId(id)?.name||id}</button>`)].join("");
+  const list=SAILINGS.filter(s=>bf==="all"||s.t===bf).sort((a,b)=>a.d.localeCompare(b.d));
+  let html="",mon="";
+  list.forEach(s=>{const t=byId(s.t);if(!t)return;const d=dt(s.d),m=d.toLocaleString('en-US',{month:'long',year:'numeric'});
+    if(m!==mon){html+=`<h3 style="margin:26px 0 10px">${m}</h3>`;mon=m}
+    const can=s.status!=="cancelled"&&s.status!=="soldout"&&s.left>0;
+    html+=`<div class="opt"><div class="sail"><div class="date"><span>${d.toLocaleString('en-US',{weekday:'short'})}</span><b>${d.getDate()}</b></div>
+      <div><b>${t.name}</b><div class="note">${s.time||t.time} · ${fmt(t.prices.Adult)} adult · <a href="#trip/${t.id}">details</a></div>${s.note?`<div class="note">${s.note}</div>`:''}</div></div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:end">${seatPill(s)}${can?`<a class="btn btn-o btn-s" href="${bookHref(t)}" target="_blank" rel="noopener">Reserve ↗</a>`:''}</div></div>`});
+  $("#schedule").innerHTML=html||'<p class="note">No sailings posted yet. Call the office.</p>';
+}
+// ---------- GALLERY ----------
+function renderGallery(){
+  $("#gallery").innerHTML=PHOTOS.length?PHOTOS.map((p,i)=>`<figure onclick="lbOpen(${i})">${p.src?`<img src="${p.src}" alt="${esc(p.cap)}" loading="lazy">`:`<div class="phd" style="background:linear-gradient(135deg,${["#1f6f8b","#ff6a1a","#2a8fa8","#0b2340"][i%4]},#0b2340)">🐟</div>`}<figcaption>${esc(p.cap)}<span>${p.d?dt(p.d).toLocaleDateString('en-US',{month:'short',day:'numeric'}):''}</span></figcaption></figure>`).join(""):'<p class="note">No photos yet.</p>';
+}
+function lbOpen(i){const p=PHOTOS[i];if(!p.src)return;$("#lbImg").src=p.src;$("#lbCap").textContent=p.cap;$("#lb").classList.remove("hide")}
+const esc=x=>String(x||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+// ---------- REPORTS ----------
+let rf="All";
+function renderReports(){
+  const tags=["All",...new Set(REPORTS.map(r=>r.tag))];
+  $("#repFilters").innerHTML=tags.map(t=>`<button class="chip ${rf===t?'on':''}" onclick="rf='${t}';renderReports()">${t}</button>`).join("");
+  $("#reportList").innerHTML=REPORTS.slice().sort((a,b)=>b.d.localeCompare(a.d)).filter(r=>rf==="All"||r.tag===rf).map((r,i)=>`<article class="card report">${r.img?`<img class="ph" src="${r.img}" alt="" style="width:100%;object-fit:cover">`:`<div class="ph" style="background:linear-gradient(135deg,${["#1f6f8b","#0b2340","#2a8fa8","#ff6a1a"][i%4]},#0b2340)"></div>`}<div><div class="note">${dt(r.d).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})} · <span class="pill">${r.tag}</span></div><h3 style="margin:6px 0">${esc(r.t)}</h3><p style="white-space:pre-line">${esc(r.x)}</p>${Object.entries(r.s).map(([k,v])=>`<span class="stat"><b>${v}</b>${k}</span>`).join("")}</div></article>`).join("");
+}
+// ---------- CHARTERS ----------
+function renderCharters(){
+  $("#chTable").innerHTML=`<tr><th>Charter</th><th>When</th><th>Base price</th><th>Includes up to</th><th>Each extra</th></tr>`+CHARTERS.map(c=>`<tr><td><b>${c[0]}</b></td><td>${c[1]}</td><td>${fmt(c[2])}</td><td>${c[3]} people</td><td>${fmt(c[4])}</td></tr>`).join("");
+  $("#chType").innerHTML=CHARTERS.map((c,i)=>`<option value="${i}">${c[0]}</option>`).join("");
+  const calc=()=>{const c=CHARTERS[$("#chType").value],n=+$("#chSize").value||0,ex=Math.max(0,n-c[3]),base=c[2]+ex*c[4],tip=Math.round(base*.18);
+   $("#chOut").innerHTML=`<div class="line" style="display:flex;justify-content:space-between"><span>Base (up to ${c[3]})</span><b>${fmt(c[2])}</b></div>${ex?`<div style="display:flex;justify-content:space-between"><span>${ex} extra × ${fmt(c[4])}</span><b>${fmt(ex*c[4])}</b></div>`:''}
+   <div style="display:flex;justify-content:space-between"><span>Suggested crew tip (18%)</span><b>${fmt(tip)}</b></div>
+   <div style="display:flex;justify-content:space-between;border-top:2px solid var(--line);margin-top:8px;padding-top:8px;font:800 22px Archivo"><span>≈ Total</span><span>${fmt(base+tip)}</span></div>
+   <div class="note">≈ ${fmt(Math.round((base+tip)/Math.max(1,n)))} per person</div>`};
+  $("#chType").onchange=calc;$("#chSize").oninput=calc;calc();
+}
+// ---------- GIFT ----------
+function renderGift(){
+  $("#giftAmts").innerHTML=[50,99,130,230,410].map(a=>`<button class="chip" onclick="document.getElementById('giftCustom').value=${a};gs()">$${a}</button>`).join("");
+  window.gs=()=>$("#giftShow").textContent="$"+(+$("#giftCustom").value||0);$("#giftCustom").oninput=gs;
+}
+// ---------- ROUTER ----------
+function route(){
+  const [p,a,b]=(location.hash.slice(1)||"home").split("/");
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("on"));
+  const pg=$("#p-"+p)||$("#p-home"); pg.classList.add("on");
+  document.querySelectorAll("nav.main a").forEach(x=>x.classList.toggle("on",x.getAttribute("href")==="#"+p));
+  document.querySelector("nav.main").classList.remove("open");
+  if(p==="trips")renderTrips(); if(p==="trip")renderTrip(a); if(p==="book")renderBook(a||"all"); if(p==="gallery")renderGallery();
+  if(p==="reports")renderReports(); if(p==="charters")renderCharters(); if(p==="gift")renderGift();
+  window.scrollTo(0,0);
+}
+renderHome(); window.onhashchange=route; route();
+</script>
+</body>
+</html>
