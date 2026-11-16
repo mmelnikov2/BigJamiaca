@@ -52,3 +52,8 @@ To preview, open `index.html` in a browser. Open `admin.html`, log in with any p
 3. **Consent wording reviewed** for TCPA. The text on the site is a reasonable sample, not legal advice. STOP and HELP replies must work.
 4. **Which phone booked which trip.** Booking stays on the old system, so either its developer sends us bookings (or adds the consent box on their form), or cancellation texts only reach people who typed their number on our side.
 5. **Seat counts from the booking system** for the waiting list. Today "sold out" is whatever staff set in the admin.
+
+## Demo booking page (draft only)
+While `SITE_DRAFT` is true in `draft.js`, every Reserve button opens a demo booking page inside the site (`#reserve/<trip>/<date>`): tickets by type, rod and bunk add-ons, a running total, name/email/phone with the text-alert consent box, a pretend payment step with no card fields, and a demo confirmation. Nothing is saved, sent or charged and no seat is held.
+
+At launch, setting `SITE_DRAFT = false` brings back the real hand-off: the consent step, then the current booking system at `bookUrl`. If the owner later wants this page to be the real checkout, it needs the booking system's API (seat holds, prices, payment) or a hosted checkout such as Stripe or Square; card details should never be typed into our own page.

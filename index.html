@@ -258,6 +258,18 @@ img{max-width:100%}
 .post h3{font-size:24px;margin:8px 0}
 .post .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 .post.hl{box-shadow:0 0 0 3px var(--orange)}
+.rs-grid{display:grid;gap:22px;align-items:start;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}
+@media(max-width:800px){.rs-grid{grid-template-columns:1fr}.rs-grid .card[style*=sticky]{position:static!important}}
+.rs-steps{display:flex;gap:6px;margin:0 0 18px;padding:0;list-style:none;flex-wrap:wrap}
+.rs-steps li{flex:1;min-width:110px;font:700 13px Archivo;padding:8px 10px;border-radius:8px;background:var(--foam);color:var(--muted)}
+.rs-steps li.on{background:var(--orange);color:#fff}.rs-steps li.done{background:var(--sea);color:#fff}
+.qty{display:flex;align-items:center;gap:8px}.qty button{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:800 20px Archivo;cursor:pointer}
+.qty button:disabled{opacity:.35;cursor:default}.qty b{min-width:26px;text-align:center;font:800 18px Archivo}
+.rs-line{display:flex;justify-content:space-between;gap:10px;padding:4px 0}.rs-total{border-top:2px solid var(--line);margin-top:8px;padding-top:8px;font:800 22px Archivo}
+.fakecard{border-radius:14px;padding:18px;color:#fff;background:linear-gradient(135deg,#0b2340,#1f6f8b);font:600 15px Inter;letter-spacing:1px;margin:10px 0}
+.fakecard .num{font:700 20px Archivo;letter-spacing:3px;margin:16px 0 10px}
+.demo-banner{background:#fff1cc;color:#6b4a00;border:2px dashed #d99a00;border-radius:10px;padding:10px 14px;font-size:14px;margin:0 0 16px}
+@media (prefers-color-scheme: dark){.demo-banner{background:#3a2d0a;color:#ffe08a}}
 .demo{display:inline-block;font:700 11px Archivo;letter-spacing:1px;text-transform:uppercase;background:#fff1cc;color:#6b4a00;border:1px dashed #d99a00;border-radius:6px;padding:3px 8px}
 .modal{position:fixed;inset:0;background:rgba(5,14,26,.7);z-index:60;display:flex;align-items:center;justify-content:center;padding:16px}
 .modal .box{background:var(--card);color:var(--ink);border-radius:16px;max-width:480px;width:100%;max-height:92vh;overflow:auto;padding:22px;position:relative}
@@ -272,7 +284,7 @@ img{max-width:100%}
 </style>
 </head>
 <body>
-<div class="proto" id="proto">Redesign prototype<span class="proto-x">. Not the official site. "Reserve" buttons open the current live booking system. Forms here are demos.</span></div>
+<div class="proto" id="proto">Redesign prototype<span class="proto-x">. Not the official site. Booking, payment and forms here are demos: nothing is saved or charged.</span></div>
 
 <header class="top">
   <div class="wrap">
@@ -395,7 +407,7 @@ img{max-width:100%}
   <section><div class="wrap">
     <div class="sec-h"><div><div class="eyebrow">Schedule &amp; booking</div><h2 style="font-size:40px">Sailing calendar</h2></div>
     <a class="btn btn-g btn-s" href="tel:7325285014">Questions? (732) 528-5014</a></div>
-    <p class="note" style="max-width:720px">Pick a sailing and you'll go to our secure reservation system to choose tickets, rods and bunks and pay. Offshore trips are paid in full at booking and are non-refundable unless the captain cancels.</p>
+    <p class="note" style="max-width:720px" id="bookIntro">Pick a sailing and you'll go to our secure reservation system to choose tickets, rods and bunks and pay. Offshore trips are paid in full at booking and are non-refundable unless the captain cancels.</p>
     <p style="margin:0 0 14px"><a href="#alerts" class="pill" style="text-decoration:none;padding:8px 12px">📱 Get a text if your trip is cancelled →</a></p>
     <div class="filters" id="bookFilters"></div>
     <div class="cal-bar">
@@ -407,6 +419,11 @@ img{max-width:100%}
     <div id="dayPanel"></div>
     <div id="schedule"></div>
   </div></section>
+</div>
+
+<!-- ========== DEMO BOOKING (draft only; real site hands off to the booking system) ========== -->
+<div class="page" id="p-reserve">
+  <section><div class="wrap" id="reserveBody" style="max-width:1000px"></div></section>
 </div>
 
 <!-- ========== GALLERY ========== -->
@@ -441,7 +458,7 @@ img{max-width:100%}
       <span class="demo">Demo: not live yet</span>
       <h3 style="margin-top:10px">Sign up for texts</h3>
       <form id="alertForm" onsubmit="event.preventDefault();demoDone(this,'Text alerts')">
-        <label class="f" for="alPhone">Mobile number</label><input id="alPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(555) 555-0100" required pattern="[0-9()+ .-]{10,}">
+        <label class="f" for="alPhone">Mobile number</label><input id="alPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(555) 555-0100" required pattern="[^a-zA-Z]{10,}" title="10 digit phone number">
         <label class="f">Text me about</label>
         <label class="consent" style="color:var(--ink);font-size:15px;margin-top:4px"><input type="checkbox" checked> Cancellations and time changes for trips I booked</label>
         <label class="consent" style="color:var(--ink);font-size:15px"><input type="checkbox"> New sea bass and blackfish trips</label>
@@ -659,7 +676,7 @@ function visible(){return SAILINGS.filter(s=>(bf==="all"||s.t===bf)&&byId(s.t))}
 function sailRow(s){const t=byId(s.t),d=dt(s.d),full=s.status==="soldout"||s.left<=0,can=s.status!=="cancelled"&&!full,i=SAILINGS.indexOf(s);
   return `<div class="opt"><div class="sail"><div class="date"><span>${d.toLocaleString('en-US',{weekday:'short'})}</span><b>${d.getDate()}</b></div>
    <div><b>${t.name}</b><div class="note">${s.time||t.time} · ${fmt(t.prices.Adult)} adult · <a href="#trip/${t.id}">details</a></div>${s.note?`<div class="note">${esc(s.note)}</div>`:''}${wxLine(s.d)}</div></div>
-   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:end">${seatPill(s)}${can?`<button class="btn btn-o btn-s" onclick="reserveStep(${i})">Reserve</button>`:''}${full&&s.status!=="cancelled"?`<button class="btn btn-g btn-s" onclick="waitlist(${i})">Join waiting list</button>`:''}</div></div>`}
+   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:end">${seatPill(s)}${can?`<button class="btn btn-o btn-s" onclick="${BOOKING_DEMO?`goReserve(${i})`:`reserveStep(${i})`}">Reserve</button>`:''}${full&&s.status!=="cancelled"?`<button class="btn btn-g btn-s" onclick="waitlist(${i})">Join waiting list</button>`:''}</div></div>`}
 function renderBook(only){
   if(only&&only!==bf){bf=only;selDay=null;
     const nx=visible().filter(s=>s.d>=todayISO()).sort((a,b)=>a.d.localeCompare(b.d))[0];
@@ -772,7 +789,7 @@ function closeModal(){$("#modal").classList.add("hide");document.body.style.over
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
 function toast(m){const t=$("#tst");t.textContent=m;t.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("on"),2600)}
 const sailTitle=s=>{const t=byId(s.t);return `<b>${t.name}</b><div class="note">${dt(s.d).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})} · ${s.time||t.time}</div>`};
-function reserveStep(i){const s=SAILINGS[i],t=byId(s.t);
+function reserveStep(i){if(BOOKING_DEMO)return goReserve(i);const s=SAILINGS[i],t=byId(s.t);
   openModal(`<h3 style="margin-right:40px">Before you reserve</h3>${sailTitle(s)}${wxLine(s.d)}
    <div class="card" style="margin:14px 0;padding:14px"><span class="demo">Demo: number is not saved</span>
    <label class="f" for="rsPhone">Mobile number (optional)</label><input id="rsPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(555) 555-0100">
@@ -784,10 +801,83 @@ function waitlist(i){const s=SAILINGS[i];
    <span class="demo">Demo: not live yet</span>
    <form onsubmit="event.preventDefault();demoDone(this,'Waiting list')">
    <label class="f" for="wlName">Name</label><input id="wlName" autocomplete="name" required>
-   <div class="row2"><div><label class="f" for="wlPhone">Mobile number</label><input id="wlPhone" type="tel" inputmode="tel" autocomplete="tel" required pattern="[0-9()+ .-]{10,}"></div><div><label class="f" for="wlN">Seats needed</label><select id="wlN"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div></div>
+   <div class="row2"><div><label class="f" for="wlPhone">Mobile number</label><input id="wlPhone" type="tel" inputmode="tel" autocomplete="tel" required pattern="[^a-zA-Z]{10,}" title="10 digit phone number"></div><div><label class="f" for="wlN">Seats needed</label><select id="wlN"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div></div>
    <label class="consent"><input type="checkbox" required> <span>${SMS_LEGAL}</span></label>
    <button class="btn btn-o" style="width:100%;margin-top:14px">Add me to the list</button></form>`)}
 function demoDone(form,what){form.outerHTML=`<div class="alert" style="margin-top:12px"><b>${what}: this is a demo.</b> Nothing was saved and no text will be sent. The real service isn't connected yet. For now call <a href="tel:7325285014">(732) 528-5014</a>.</div>`}
+// ---------- DEMO BOOKING PAGE (shown while window.BOOKING_DEMO is true, set in draft.js) ----------
+// Nothing typed here is saved, sent or charged. At launch BOOKING_DEMO=false and Reserve goes to the real booking system again.
+const BOOKING_DEMO = window.BOOKING_DEMO === true;
+let RS = null; // current demo booking, kept in memory only
+const sailKey = s => `${s.t}/${s.d}`;
+function goReserve(i){const s=SAILINGS[i];location.hash="reserve/"+sailKey(s)}
+function renderReserve(tid,d){
+  const s=SAILINGS.find(x=>x.t===tid&&x.d===d), t=s&&byId(s.t);
+  const box=$("#reserveBody");
+  if(!s||!t||s.status==="cancelled"||s.status==="soldout"||s.left<=0||s.d<todayISO()){
+    box.innerHTML=`<div class="card" style="text-align:center"><h3>That sailing isn't available</h3><p class="note">It may be full, cancelled or in the past.</p><a class="btn btn-o" href="#book">Back to the calendar</a></div>`;return}
+  if(!RS||RS.key!==sailKey(s))RS={key:sailKey(s),step:1,q:Object.fromEntries(Object.keys(t.prices).map(k=>[k,0])),rods:0,bunks:0,name:"",email:"",phone:"",sms:false,terms:false};
+  drawReserve(s,t);
+}
+function rsTickets(){return Object.values(RS.q).reduce((a,b)=>a+b,0)}
+function rsTotal(t){let sum=0;for(const k in RS.q)sum+=RS.q[k]*t.prices[k];return sum+RS.rods*(t.rod||0)+RS.bunks*(t.bunk||0)}
+function rsSet(field,key,delta){const s=SAILINGS.find(x=>sailKey(x)===RS.key),t=byId(s.t),max=Math.min(s.left,20);
+  if(field==="q"){const n=RS.q[key]+delta;if(n<0||rsTickets()+delta>max)return;RS.q[key]=n;RS.rods=Math.min(RS.rods,rsTickets());RS.bunks=Math.min(RS.bunks,rsTickets())}
+  else{const n=RS[field]+delta;if(n<0||n>rsTickets())return;RS[field]=n}
+  drawReserve(s,t)}
+function rsGo(step){const s=SAILINGS.find(x=>sailKey(x)===RS.key),t=byId(s.t);
+  if(step===3){const f=$("#rsForm");if(f&&!f.reportValidity())return;RS.name=$("#rsName").value.trim();RS.email=$("#rsEmail").value.trim();RS.phone=$("#rsPh").value.trim();RS.sms=$("#rsSms").checked;RS.terms=$("#rsTerms").checked}
+  if(step===2&&!rsTickets())return toast("Add at least one ticket");
+  RS.step=step;drawReserve(s,t);window.scrollTo(0,0)}
+function rsSummary(s,t){
+  const lines=Object.entries(RS.q).filter(([,n])=>n).map(([k,n])=>`<div class="rs-line"><span>${n} × ${esc(k)}</span><b>${fmt(n*t.prices[k])}</b></div>`).join("")
+   +(RS.rods?`<div class="rs-line"><span>${RS.rods} × rod rental</span><b>${fmt(RS.rods*t.rod)}</b></div>`:"")
+   +(RS.bunks?`<div class="rs-line"><span>${RS.bunks} × bunk</span><b>${fmt(RS.bunks*t.bunk)}</b></div>`:"");
+  return `<div class="card" style="position:sticky;top:84px"><h3 style="margin-top:0">Your trip</h3>${sailTitle(s)}${wxLine(s.d)}
+   <div style="margin-top:12px">${lines||'<p class="note">No tickets yet.</p>'}</div>
+   <div class="rs-line rs-total"><span>Total</span><span>${fmt(rsTotal(t))}</span></div>
+   <p class="note" style="margin:8px 0 0">Prices from the trip page. Demo only: the real system may add taxes or fees.</p></div>`}
+function drawReserve(s,t){
+  const st=RS.step, steps=["Tickets","Your details","Payment","Confirmed"];
+  const head=`<a class="note" href="#book/${t.id}">‹ Back to the calendar</a>
+   <div class="demo-banner" style="margin-top:10px"><b>Demo booking page.</b> This shows how booking will work. Nothing you enter is saved, sent or charged, and no seat is held. To really book, call <a href="tel:7325285014">(732) 528-5014</a>.</div>
+   <h2 style="font-size:34px;margin:0 0 12px">Reserve: ${esc(t.name)}</h2>
+   <ol class="rs-steps">${steps.map((x,i)=>`<li class="${i+1===st?'on':i+1<st?'done':''}">${i+1}. ${x}</li>`).join("")}</ol>`;
+  let body="";
+  if(st===1){
+    const max=Math.min(s.left,20), n=rsTickets();
+    const row=(label,sub,val,dec,inc,disInc)=>`<div class="opt" style="flex-direction:row;align-items:center"><div><b>${label}</b><div class="note">${sub}</div></div><div class="qty"><button aria-label="Fewer ${label}" onclick="${dec}" ${val?'':'disabled'}>−</button><b>${val}</b><button aria-label="More ${label}" onclick="${inc}" ${disInc?'disabled':''}>+</button></div></div>`;
+    body=`<h3>Tickets</h3><p class="note">${s.left} spots open on this sailing${s.left>20?" (up to 20 per booking)":""}.</p>`
+     +Object.keys(t.prices).map((k,i)=>row(esc(k),fmt(t.prices[k])+" each",RS.q[k],`rsSet('q',Object.keys(byId('${t.id}').prices)[${i}],-1)`,`rsSet('q',Object.keys(byId('${t.id}').prices)[${i}],1)`,n>=max)).join("")
+     +(t.rod?`<h3 style="margin-top:22px">Extras</h3>`+row("Rod rental",fmt(t.rod)+" each, one per ticket at most",RS.rods,"rsSet('rods',0,-1)","rsSet('rods',0,1)",RS.rods>=n):"")
+     +(t.bunk?(t.rod?"":`<h3 style="margin-top:22px">Extras</h3>`)+row("Bunk",fmt(t.bunk)+" each, one per ticket at most",RS.bunks,"rsSet('bunks',0,-1)","rsSet('bunks',0,1)",RS.bunks>=n):"")
+     +`<button class="btn btn-o" style="width:100%;margin-top:16px" onclick="rsGo(2)" ${n?'':'disabled'}>Continue</button>`;
+  }
+  if(st===2){
+    body=`<h3>Your details</h3><span class="demo">Demo: nothing is saved</span>
+     <form id="rsForm" onsubmit="event.preventDefault();rsGo(3)">
+     <label class="f" for="rsName">Name for the reservation</label><input id="rsName" autocomplete="off" required placeholder="John Doe" value="${esc(RS.name)}">
+     <div class="row2"><div><label class="f" for="rsEmail">Email</label><input id="rsEmail" type="email" autocomplete="off" required placeholder="john.doe@example.com" value="${esc(RS.email)}"></div>
+     <div><label class="f" for="rsPh">Mobile number</label><input id="rsPh" type="tel" inputmode="tel" autocomplete="off" required pattern="[^a-zA-Z]{10,}" title="10 digit phone number" placeholder="(555) 555-0100" value="${esc(RS.phone)}"></div></div>
+     <label class="consent"><input type="checkbox" id="rsSms" ${RS.sms?'checked':''}> <span><b style="color:var(--ink)">Text me if this trip is cancelled or the time changes.</b> (optional)<br>${SMS_LEGAL}</span></label>
+     <label class="consent"><input type="checkbox" id="rsTerms" required ${RS.terms?'checked':''}> <span><b style="color:var(--ink)">I understand the trip rules.</b> Tickets are non-refundable unless the captain cancels. Arrive 45 minutes before departure.</span></label>
+     <div style="display:flex;gap:10px;margin-top:16px"><button type="button" class="btn btn-g" onclick="rsGo(1)">Back</button><button class="btn btn-o" style="flex:1">Continue to payment</button></div></form>`;
+  }
+  if(st===3){
+    body=`<h3>Payment</h3><span class="demo">Demo: no card is needed or accepted</span>
+     <p class="note">The real site will use a secure payment page from the booking system. To keep this demo safe there are no card boxes here, so nobody types a real card number into a draft.</p>
+     <div class="fakecard" aria-hidden="true"><div>DEMO CARD</div><div class="num">•••• •••• •••• 4242</div><div style="display:flex;justify-content:space-between"><span>JOHN DOE</span><span>12/30</span></div></div>
+     <div style="display:flex;gap:10px;margin-top:16px"><button class="btn btn-g" onclick="rsGo(2)">Back</button><button class="btn btn-o" style="flex:1" onclick="rsGo(4)">Pay ${fmt(rsTotal(t))} (demo, no charge)</button></div>`;
+  }
+  if(st===4){
+    const ref="DEMO-"+(t.id.slice(0,3)+s.d.replace(/-/g,"").slice(2)).toUpperCase();
+    body=`<div class="card" style="border:2px solid var(--sea)"><h3 style="margin-top:0">✓ You're booked (demo)</h3>
+     <p>Confirmation <b>${ref}</b></p>
+     <p class="note">On the real site, ${esc(RS.name||"the customer")} would now get a confirmation email${RS.sms?" and a text":""}. In this demo nothing was saved, sent or charged, and no seat was held.</p>
+     <div class="row2" style="margin-top:12px"><a class="btn btn-o" href="#visit">Directions &amp; what to bring</a><a class="btn btn-g" href="#book">Book another trip</a></div></div>`;
+  }
+  $("#reserveBody").innerHTML=head+`<div class="rs-grid"><div>${body}</div>${rsSummary(s,t)}</div>`;
+}
 // ---------- CHARTERS ----------
 function renderCharters(){
   $("#chTable").innerHTML=`<tr><th>Charter</th><th>When</th><th>Base price</th><th>Includes up to</th><th>Each extra</th></tr>`+CHARTERS.map(c=>`<tr><td><b>${c[0]}</b></td><td data-l="When">${c[1]}</td><td data-l="Base price">${fmt(c[2])}</td><td data-l="Includes up to">${c[3]} people</td><td data-l="Each extra">${fmt(c[4])}</td></tr>`).join("");
@@ -812,10 +902,11 @@ function route(){
   document.querySelectorAll("nav.main a").forEach(x=>x.classList.toggle("on",x.getAttribute("href")==="#"+p));
   document.querySelector("nav.main").classList.remove("open");
   if(p==="trips")renderTrips(); if(p==="trip")renderTrip(a); if(p==="book")renderBook(a||"all"); if(p==="gallery")renderGallery();
-  if(p==="reports")renderReports(a); if(p==="charters")renderCharters(); if(p==="gift")renderGift();
+  if(p==="reports")renderReports(a); if(p==="charters")renderCharters(); if(p==="gift")renderGift(); if(p==="reserve")renderReserve(a,b);
   window.scrollTo(0,0);
 }
 document.querySelectorAll(".smsLegal").forEach(e=>e.textContent=SMS_LEGAL);
+if(BOOKING_DEMO)$("#bookIntro").innerHTML='Pick a sailing and press <b>Reserve</b> to choose tickets, rods and bunks. <span class="demo">Demo booking: nothing is charged</span> Offshore trips are paid in full at booking and are non-refundable unless the captain cancels.';
 renderStatus(); renderHome(); window.onhashchange=route; route(); loadWx();
 // Published content (what the admin page saves on the hosted site)
 fetch("content.json",{cache:"no-cache"}).then(r=>r.ok?r.json():null).then(c=>{if(!c)return;applyContent(c);localOverride();renderStatus();renderHome();route()}).catch(()=>{});
