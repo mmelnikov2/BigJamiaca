@@ -62,6 +62,10 @@ td input,td select{padding:6px 8px;font-size:14px}
   #login{margin:30px 12px}
 }
 .pub{position:sticky;top:124px;z-index:3;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--navy);color:#fff;padding:12px 16px;border-radius:12px;margin-bottom:16px;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.st3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stb{min-height:60px;border-radius:12px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:800 16px Archivo;cursor:pointer}
+.stb.on.go{background:#1f8a4c;border-color:#1f8a4c;color:#fff}.stb.on.watch{background:#d99a00;border-color:#d99a00;color:#fff}.stb.on.cancelled{background:#b42318;border-color:#b42318;color:#fff}
+@media(max-width:700px){.st3{grid-template-columns:1fr}}
 .hide{display:none!important}
 #login{max-width:380px;margin:80px auto}
 .warn{background:#fff4e5;border-left:4px solid #b54708;padding:10px 14px;border-radius:8px;font-size:13px;color:#5a3300;margin-bottom:16px}
@@ -86,6 +90,17 @@ td input,td select{padding:6px 8px;font-size:14px}
 <main>
   <div class="warn" id="modeNote">Preview mode: changes save to <b>this browser only</b>. On the hosted site they publish for everyone.</div>
   <div id="pubBar" class="pub hide"><span id="pubMsg">You have unpublished changes.</span><button class="btn" id="pubBtn" onclick="publish()">Publish changes</button></div>
+
+  <div class="card" id="statusCard">
+    <h2 style="margin-bottom:4px">Is the boat sailing today?</h2>
+    <p class="note" style="margin:0 0 10px">One tap. Shows as a colored bar at the top of every page. <span id="stNow"></span></p>
+    <div class="st3">
+      <button class="stb go" onclick="setStatus('go')">✅ Sailing</button>
+      <button class="stb watch" onclick="setStatus('watch')">⚠️ Watching weather</button>
+      <button class="stb cancelled" onclick="setStatus('cancelled')">⛔ Cancelled</button>
+    </div>
+    <label for="stText">Message (optional)</label><input id="stText" maxlength="140" placeholder="e.g. Decision on tonight's 10 PM trip at 2 PM">
+  </div>
 
   <!-- SCHEDULE -->
   <section data-tab="schedule">
@@ -161,6 +176,7 @@ td input,td select{padding:6px 8px;font-size:14px}
 </div>
 <div class="toast" id="toast"></div>
 
+<script src="draft.js"></script>
 <script src="content.js"></script>
 <script>
 const KEY="bj_content";
@@ -228,10 +244,17 @@ function init(){
   let t="schedule";try{t=localStorage.getItem("bj_tab")||t}catch(e){} tab(t);
   $("#sTrip").innerHTML=C.trips.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join("");
   $("#sDate").value=today(); $("#rDate").value=today();
-  rSched();rReports();rPhotos();rTrips();usage();
+  rStatus();rSched();rReports();rPhotos();rTrips();usage();
   if(SERVER)$("#resetBtn").classList.add("hide");
 }
-// ---- schedule
+// ---- today's status
+function rStatus(){const s=C.status||{};const cur=s.d===today()?s.level:null;
+  document.querySelectorAll(".stb").forEach(b=>b.classList.toggle("on",!!cur&&b.classList.contains(cur)));
+  $("#stText").value=s.d===today()?(s.text||""):"";
+  $("#stNow").textContent=cur?`Posted today at ${s.at||""}.`:"Nothing posted yet today.";}
+function setStatus(level){const now=new Date();
+  C.status={level,text:$("#stText").value.trim(),d:today(),at:now.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"})};
+  rStatus();save("Status set");if(SERVER)publish();}
 function addSailings(){
   const t=$("#sTrip").value,d0=$("#sDate").value,rep=+$("#sRep").value,until=$("#sUntil").value||d0;
   if(!d0)return toast("Pick a date",true);

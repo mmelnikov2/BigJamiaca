@@ -48,21 +48,21 @@ nav.main a:hover,nav.main a.on{background:rgba(255,255,255,.1);opacity:1}
   .top .btn-o{display:none}
 }
 /* hero */
-.hero{position:relative;color:#fff;min-height:clamp(500px,46vw,660px);background:
-  linear-gradient(105deg,rgba(8,22,39,.82) 0%,rgba(8,22,39,.45) 28%,rgba(8,22,39,0) 48%),
-  linear-gradient(180deg,rgba(8,22,39,.35) 0%,rgba(8,22,39,0) 30%,rgba(8,22,39,0) 78%,#0b2340 100%),
-  url("images/hero-boat.jpg") center 10%/cover no-repeat,#0b2340}
+.hero{position:relative;color:#fff;min-height:clamp(500px,46vw,680px);background:
+  linear-gradient(100deg,rgba(8,22,39,.8) 0%,rgba(8,22,39,.4) 24%,rgba(8,22,39,0) 42%),
+  linear-gradient(180deg,rgba(8,22,39,.3) 0%,rgba(8,22,39,0) 25%,rgba(8,22,39,0) 86%,#0b2340 100%),
+  url("images/hero-boat.jpg") center 45%/cover no-repeat,#0b2340}
 .hero .wrap{position:relative;z-index:2;padding:48px 20px 40px}
-.hero h1{font-size:clamp(32px,3.7vw,54px);font-weight:900;max-width:540px;text-shadow:0 2px 18px rgba(0,0,0,.35);margin-bottom:.35em}
+.hero h1{font-size:clamp(30px,3.2vw,48px);font-weight:900;max-width:440px;text-shadow:0 2px 18px rgba(0,0,0,.35);margin-bottom:.35em}
 .hero .btn-g{background:rgba(8,22,39,.35);backdrop-filter:blur(4px)}
 .hero-band{background:#0b2340;color:#fff;padding:8px 0 120px}
 .hero-band .lead{font-size:19px;max-width:720px;opacity:.92;margin:0}
 .hero-band .facts{margin-top:22px}
 .hero-band .wrap .cta{display:none}
 @media(max-width:700px){
-  .hero{min-height:600px;background:
-    linear-gradient(180deg,#0b2340 0%,#0b2340 18%,rgba(11,35,64,.75) 40%,rgba(11,35,64,0) 54%,rgba(11,35,64,0) 88%,#0b2340 100%),
-    url("images/hero-boat.jpg") 28% 100%/200% auto no-repeat,#0b2340}
+  .hero{min-height:calc(200px + 76vw);background:
+    linear-gradient(180deg,#0b2340 0%,#0b2340 calc(100% - 78vw),rgba(11,35,64,0) calc(100% - 60vw),rgba(11,35,64,0) calc(100% - 8vw),#0b2340 100%),
+    url("images/hero-boat.jpg") 47% 100%/122% auto no-repeat,#0b2340}
   .hero .wrap{padding-top:30px}
   .hero .wrap .cta{display:none}
   .hero-band .wrap .cta{display:flex;margin:0 0 20px}
@@ -235,6 +235,38 @@ img{max-width:100%}
 @media(max-width:360px){.logo small{display:none}.hero h1{font-size:29px}}
 .only-m{display:none}
 @media(max-width:1180px){nav.main a.only-m{display:block;color:#ffb48a}}
+/* ---------- status bar, forecast, feed, modal ---------- */
+.st{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;padding:9px 16px;font-size:15px;font-weight:600;text-align:center}
+.st b{font-family:Archivo,sans-serif;letter-spacing:.3px}
+.st .dot{width:11px;height:11px;border-radius:99px;background:currentColor;flex:none}
+.st small{font-weight:500;opacity:.8}
+.st a{font-weight:700}
+.st-go{background:#dcf3e5;color:#11603a}.st-watch{background:#fff1cc;color:#6b4a00}.st-cancelled{background:#fde2e2;color:#8f1414}.st-none{background:var(--foam);color:var(--muted)}
+@media (prefers-color-scheme: dark){.st-go{background:#0f3a26;color:#9fe3bd}.st-watch{background:#3d3000;color:#ffd97a}.st-cancelled{background:#4a1414;color:#ffb3b3}}
+.wx{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.wxc{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--card);border-top:4px solid var(--ok)}
+.wxc.mod{border-top-color:#d99a00}.wxc.rough{border-top-color:#c62828}
+.wxc h4{margin:0 0 6px;font-size:14px;letter-spacing:.5px;text-transform:uppercase}
+.wxc .big{font:800 20px Archivo}.wxc .sub{font-size:13px;color:var(--muted)}
+.wxl{font-size:13px;margin-top:4px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.wxl i{width:9px;height:9px;border-radius:9px;background:var(--ok);display:inline-block}.wxl.mod i{background:#d99a00}.wxl.rough i{background:#c62828}
+.feed{display:grid;gap:22px}
+.post{padding:0;overflow:hidden}
+.post .img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}
+.post .img.ph{display:flex;align-items:center;justify-content:center;font-size:64px}
+.post .pb{padding:18px 20px 20px}
+.post h3{font-size:24px;margin:8px 0}
+.post .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.post.hl{box-shadow:0 0 0 3px var(--orange)}
+.demo{display:inline-block;font:700 11px Archivo;letter-spacing:1px;text-transform:uppercase;background:#fff1cc;color:#6b4a00;border:1px dashed #d99a00;border-radius:6px;padding:3px 8px}
+.modal{position:fixed;inset:0;background:rgba(5,14,26,.7);z-index:60;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal .box{background:var(--card);color:var(--ink);border-radius:16px;max-width:480px;width:100%;max-height:92vh;overflow:auto;padding:22px;position:relative}
+.modal .x{position:absolute;top:8px;right:8px;width:44px;height:44px;border:0;background:none;font-size:26px;color:var(--muted);cursor:pointer}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--muted);margin-top:12px;line-height:1.45}
+.consent input{width:22px!important;height:22px;flex:none;margin-top:1px;min-height:0}
+.tst{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:12px 18px;border-radius:10px;font-weight:600;z-index:70;opacity:0;transition:.25s;pointer-events:none;max-width:90vw}
+.tst.on{opacity:1}
+@media(max-width:700px){.modal{align-items:flex-end;padding:0}.modal .box{border-radius:16px 16px 0 0;max-width:none;padding-bottom:calc(22px + env(safe-area-inset-bottom))}.post h3{font-size:21px}.wx{grid-template-columns:1fr 1fr}}
 .page{display:none}.page.on{display:block}
 .hide{display:none!important}
 </style>
@@ -262,6 +294,7 @@ img{max-width:100%}
     <a class="btn btn-o btn-s" href="#book">Book Now</a>
   </div>
 </header>
+<div id="statusBar" class="st st-none" role="status" aria-live="polite"></div>
 
 <!-- ========== HOME ========== -->
 <main>
@@ -299,6 +332,14 @@ img{max-width:100%}
     </div>
   </div>
 
+  <section id="wxSec" class="hide" style="padding-bottom:0">
+    <div class="wrap">
+      <div class="sec-h"><div><div class="eyebrow">Marine forecast</div><h2>Wind &amp; seas off Brielle</h2></div><a class="note" id="wxSrc" href="https://www.weather.gov/marine/" target="_blank" rel="noopener">Source: NOAA / National Weather Service ↗</a></div>
+      <div class="wx" id="wx"></div>
+      <p class="note" style="margin-top:10px">Coastal waters forecast, Sandy Hook to Manasquan Inlet out 20 nm. Offshore canyon conditions can differ. The captain makes the call, see the status bar at the top.</p>
+    </div>
+  </section>
+
   <section>
     <div class="wrap">
       <div class="sec-h"><div><div class="eyebrow">What's biting</div><h2>Pick your trip</h2></div><a class="btn btn-g btn-s" href="#trips">All trips &amp; prices</a></div>
@@ -331,6 +372,7 @@ img{max-width:100%}
     <div class="wrap grid g2">
       <div class="card"><div class="eyebrow">Groups &amp; companies</div><h3>Charter the whole boat</h3><p>Up to 75 people on weekends. Company outings, bachelor parties, canyon tuna for your crew.</p><a href="#charters" class="btn btn-o btn-s">Charter prices</a></div>
       <div class="card"><div class="eyebrow">Give a day on the water</div><h3>Gift cards, any amount</h3><p>Delivered by email instantly. Good toward any trip or charter.</p><a href="#gift" class="btn btn-o btn-s">Buy a gift card</a></div>
+      <div class="card"><div class="eyebrow">Text alerts</div><h3>Know before you drive</h3><p>Get a text if your trip is cancelled, and when new trips open.</p><a href="#alerts" class="btn btn-o btn-s">Get text alerts</a></div>
     </div>
   </section>
 </div>
@@ -354,6 +396,7 @@ img{max-width:100%}
     <div class="sec-h"><div><div class="eyebrow">Schedule &amp; booking</div><h2 style="font-size:40px">Sailing calendar</h2></div>
     <a class="btn btn-g btn-s" href="tel:7325285014">Questions? (732) 528-5014</a></div>
     <p class="note" style="max-width:720px">Pick a sailing and you'll go to our secure reservation system to choose tickets, rods and bunks and pay. Offshore trips are paid in full at booking and are non-refundable unless the captain cancels.</p>
+    <p style="margin:0 0 14px"><a href="#alerts" class="pill" style="text-decoration:none;padding:8px 12px">📱 Get a text if your trip is cancelled →</a></p>
     <div class="filters" id="bookFilters"></div>
     <div class="cal-bar">
       <div class="cal-nav"><button class="cal-arrow" id="calPrev" aria-label="Previous month" onclick="calMove(-1)">‹</button><h3 id="calTitle"></h3><button class="cal-arrow" id="calNext" aria-label="Next month" onclick="calMove(1)">›</button></div>
@@ -377,11 +420,37 @@ img{max-width:100%}
 
 <!-- ========== REPORTS ========== -->
 <div class="page" id="p-reports">
-  <section><div class="wrap" style="max-width:860px">
+  <section><div class="wrap" style="max-width:760px">
     <div class="sec-h"><div><div class="eyebrow">From the wheelhouse</div><h2>Fishing reports</h2></div>
-      <form onsubmit="event.preventDefault();this.innerHTML='<span class=pill.ok>Subscribed (demo)</span>'" style="display:flex;gap:8px"><input type="email" placeholder="Email for report alerts" required style="width:230px"><button class="btn btn-o btn-s">Subscribe</button></form></div>
+      <a class="btn btn-g btn-s" href="#alerts">📱 Get report &amp; trip alerts</a></div>
     <div class="filters" id="repFilters"></div>
-    <div id="reportList" class="grid"></div>
+    <div id="reportList" class="feed"></div>
+  </div></section>
+</div>
+
+<!-- ========== ALERTS (mock-up) ========== -->
+<div class="page" id="p-alerts">
+  <section><div class="wrap grid g2" style="align-items:start">
+    <div>
+      <div class="eyebrow">Text alerts</div><h2 style="font-size:40px">Know before you drive to the dock</h2>
+      <p>Get a text the moment a trip you booked is cancelled or its time changes. You can also hear first when new trips open or a sold-out trip gets a free spot.</p>
+      <ul style="padding-left:18px"><li>Cancellation and weather texts for your trips</li><li>New trip openings for the fish you care about</li><li>Waiting list: a text when a seat frees up</li></ul>
+      <p class="note">Texts only when something changes. No daily spam.</p>
+    </div>
+    <div class="card">
+      <span class="demo">Demo: not live yet</span>
+      <h3 style="margin-top:10px">Sign up for texts</h3>
+      <form id="alertForm" onsubmit="event.preventDefault();demoDone(this,'Text alerts')">
+        <label class="f" for="alPhone">Mobile number</label><input id="alPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(555) 555-0100" required pattern="[0-9()+ .-]{10,}">
+        <label class="f">Text me about</label>
+        <label class="consent" style="color:var(--ink);font-size:15px;margin-top:4px"><input type="checkbox" checked> Cancellations and time changes for trips I booked</label>
+        <label class="consent" style="color:var(--ink);font-size:15px"><input type="checkbox"> New sea bass and blackfish trips</label>
+        <label class="consent" style="color:var(--ink);font-size:15px"><input type="checkbox"> New tuna and tilefish trips</label>
+        <label class="consent" style="color:var(--ink);font-size:15px"><input type="checkbox"> Striper, bluefish and special trips</label>
+        <label class="consent"><input type="checkbox" required> <span class="smsLegal"></span></label>
+        <button class="btn btn-o" style="margin-top:14px;width:100%">Sign me up</button>
+      </form>
+    </div>
   </div></section>
 </div>
 
@@ -493,23 +562,27 @@ img{max-width:100%}
 </div>
 </main>
 
+<div id="modal" class="modal hide" onclick="if(event.target===this)closeModal()"><div class="box"><button class="x" aria-label="Close" onclick="closeModal()">×</button><div id="modalBody"></div></div></div>
+<div id="tst" class="tst"></div>
 <footer>
   <div class="wrap grid g3" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
     <div><div style="font:900 22px Archivo;color:#fff">BIG JAMAICA</div><p>125' party fishing boat<br>Bogan's Basin, Brielle NJ</p><p><a href="tel:7325285014">(732) 528-5014</a></p></div>
-    <div><h4>Fish</h4><a href="#trips">Trips &amp; Prices</a><a href="#book">Schedule &amp; Book</a><a href="#reports">Fishing Reports</a><a href="#gallery">Gallery</a><a href="#charters">Private Charters</a><a href="#gift">Gift Cards</a></div>
+    <div><h4>Fish</h4><a href="#trips">Trips &amp; Prices</a><a href="#book">Schedule &amp; Book</a><a href="#reports">Fishing Reports</a><a href="#gallery">Gallery</a><a href="#charters">Private Charters</a><a href="#gift">Gift Cards</a><a href="#alerts">Text Alerts</a></div>
     <div><h4>Info</h4><a href="#visit">FAQ &amp; Directions</a><a href="#visit">Policies</a><a href="#contact">Contact</a><a href="admin.html">Staff login</a><a href="https://wreckmasters.com/" target="_blank" rel="noopener">Sister boat: 100' Paramount ↗</a></div>
     <div><h4>Follow</h4><a href="https://www.facebook.com/TheBigJamaica/" target="_blank" rel="noopener">Facebook</a><a href="https://www.instagram.com/thebigjamaica/" target="_blank" rel="noopener">Instagram</a></div>
   </div>
 </footer>
 <div class="mob-cta"><a class="btn btn-g btn-s" style="color:#fff" href="tel:7325285014">Call</a><a class="btn btn-o btn-s" href="#book">Schedule &amp; Book</a></div>
 
+<script src="draft.js"></script>
 <script src="content.js"></script>
 <script>
 // Content: defaults from content.js, overridden by admin saves
 const D=JSON.parse(JSON.stringify(window.DEFAULT_CONTENT));
 let TRIPS=D.trips,SAILINGS=D.sailings,REPORTS=D.reports,CHARTERS=D.charters,PHOTOS=D.photos;
 // Content saved from admin.html (prototype: browser storage; production: CMS/API)
-function applyContent(c){if(!c)return;if(c.trips)TRIPS=c.trips;if(c.sailings)SAILINGS=c.sailings;if(c.reports)REPORTS=c.reports;if(c.photos)PHOTOS=c.photos;if(c.charters)CHARTERS=c.charters}
+let STATUS=D.status||null;
+function applyContent(c){if(!c)return;if(c.status)STATUS=c.status;if(c.trips)TRIPS=c.trips;if(c.sailings)SAILINGS=c.sailings;if(c.reports)REPORTS=c.reports;if(c.photos)PHOTOS=c.photos;if(c.charters)CHARTERS=c.charters}
 // Local preview only: the prototype admin saves to this browser. On the hosted site content.json is the truth.
 const LOCAL_PREVIEW=["localhost","127.0.0.1",""].includes(location.hostname);
 function localOverride(){if(!LOCAL_PREVIEW)return;try{applyContent(JSON.parse(localStorage.getItem("bj_content")||"null"))}catch(e){}}
@@ -536,9 +609,9 @@ function realCost(t){ const f=t.prices.Adult, tip=Math.round(f*.18); const clean
 
 // ---------- HOME ----------
 function renderHome(){
-  $("#nextSailings").innerHTML=SAILINGS.filter(s=>s.status!=='cancelled'&&s.d>=new Date().toISOString().slice(0,10)).slice().sort((a,b)=>a.d.localeCompare(b.d)).slice(0,6).map(s=>{const t=byId(s.t),d=dt(s.d);
+  $("#nextSailings").innerHTML=SAILINGS.filter(s=>s.status!=='cancelled'&&s.d>=todayISO()).slice().sort((a,b)=>a.d.localeCompare(b.d)).slice(0,6).map(s=>{const t=byId(s.t),d=dt(s.d);
    return `<a class="sail" href="#book/${t.id}" style="text-decoration:none"><div class="date"><span>${d.toLocaleString('en-US',{month:'short'})}</span><b>${d.getDate()}</b><span>${d.toLocaleString('en-US',{weekday:'short'})}</span></div>
-   <div><b>${t.name}</b><div class="note">${t.time} · ${fmt(t.prices.Adult)}</div>${seatPill(s)}</div></a>`}).join("");
+   <div><b>${t.name}</b><div class="note">${s.time||t.time} · ${fmt(t.prices.Adult)}</div>${seatPill(s)}${wxLine(s.d)}</div></a>`}).join("");
   $("#homeTrips").innerHTML=["midrange","overnight-sb","thanks"].map(id=>tripCard(byId(id))).join("");
   const lr=REPORTS.slice().sort((a,b)=>b.d.localeCompare(a.d))[0]||{t:'',x:''};$("#latestTitle").textContent=lr.t; $("#latestText").textContent=lr.x;
 }
@@ -583,10 +656,10 @@ const MAXM=12; // months ahead the calendar can browse
 function monthIdx(y,m){return y*12+m}
 function calBounds(){const t=new Date();return [monthIdx(t.getFullYear(),t.getMonth()),monthIdx(t.getFullYear(),t.getMonth())+MAXM]}
 function visible(){return SAILINGS.filter(s=>(bf==="all"||s.t===bf)&&byId(s.t))}
-function sailRow(s){const t=byId(s.t),d=dt(s.d),can=s.status!=="cancelled"&&s.status!=="soldout"&&s.left>0;
+function sailRow(s){const t=byId(s.t),d=dt(s.d),full=s.status==="soldout"||s.left<=0,can=s.status!=="cancelled"&&!full,i=SAILINGS.indexOf(s);
   return `<div class="opt"><div class="sail"><div class="date"><span>${d.toLocaleString('en-US',{weekday:'short'})}</span><b>${d.getDate()}</b></div>
-   <div><b>${t.name}</b><div class="note">${s.time||t.time} · ${fmt(t.prices.Adult)} adult · <a href="#trip/${t.id}">details</a></div>${s.note?`<div class="note">${esc(s.note)}</div>`:''}</div></div>
-   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:end">${seatPill(s)}${can?`<a class="btn btn-o btn-s" href="${bookHref(t)}" target="_blank" rel="noopener">Reserve ↗</a>`:''}</div></div>`}
+   <div><b>${t.name}</b><div class="note">${s.time||t.time} · ${fmt(t.prices.Adult)} adult · <a href="#trip/${t.id}">details</a></div>${s.note?`<div class="note">${esc(s.note)}</div>`:''}${wxLine(s.d)}</div></div>
+   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:end">${seatPill(s)}${can?`<button class="btn btn-o btn-s" onclick="reserveStep(${i})">Reserve</button>`:''}${full&&s.status!=="cancelled"?`<button class="btn btn-g btn-s" onclick="waitlist(${i})">Join waiting list</button>`:''}</div></div>`}
 function renderBook(only){
   if(only&&only!==bf){bf=only;selDay=null;
     const nx=visible().filter(s=>s.d>=todayISO()).sort((a,b)=>a.d.localeCompare(b.d))[0];
@@ -636,11 +709,85 @@ function lbOpen(i){const p=PHOTOS[i];if(!p.src)return;$("#lbImg").src=p.src;$("#
 const esc=x=>String(x||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 // ---------- REPORTS ----------
 let rf="All";
-function renderReports(){
+const rid=r=>r.id||(r.d+"-"+String(r.t).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40));
+function renderReports(focus){
   const tags=["All",...new Set(REPORTS.map(r=>r.tag))];
-  $("#repFilters").innerHTML=tags.map(t=>`<button class="chip ${rf===t?'on':''}" onclick="rf='${t}';renderReports()">${t}</button>`).join("");
-  $("#reportList").innerHTML=REPORTS.slice().sort((a,b)=>b.d.localeCompare(a.d)).filter(r=>rf==="All"||r.tag===rf).map((r,i)=>`<article class="card report">${r.img?`<img class="ph" src="${r.img}" alt="" style="width:100%;object-fit:cover">`:`<div class="ph" style="background:linear-gradient(135deg,${["#1f6f8b","#0b2340","#2a8fa8","#ff6a1a"][i%4]},#0b2340)"></div>`}<div><div class="note">${dt(r.d).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})} · <span class="pill">${r.tag}</span></div><h3 style="margin:6px 0">${esc(r.t)}</h3><p style="white-space:pre-line">${esc(r.x)}</p>${Object.entries(r.s).map(([k,v])=>`<span class="stat"><b>${v}</b>${k}</span>`).join("")}</div></article>`).join("");
+  if(focus)rf="All";
+  $("#repFilters").innerHTML=tags.map(t=>`<button class="chip ${rf===t?'on':''}" onclick="rf='${esc(t)}';renderReports()">${esc(t)}</button>`).join("");
+  $("#reportList").innerHTML=REPORTS.slice().sort((a,b)=>b.d.localeCompare(a.d)).filter(r=>rf==="All"||r.tag===rf).map((r,i)=>{const id=rid(r);
+   return `<article class="card post ${focus===id?'hl':''}" id="r-${id}">${r.img?`<img class="img" src="${r.img}" alt="${esc(r.t)}" loading="lazy">`:`<div class="img ph" style="background:linear-gradient(135deg,${["#1f6f8b","#0b2340","#2a8fa8","#ff6a1a"][i%4]},#0b2340)">🎣</div>`}
+   <div class="pb"><div class="note">${dt(r.d).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})} · <span class="pill">${esc(r.tag)}</span></div>
+   <h3>${esc(r.t)}</h3><p style="white-space:pre-line;margin:0 0 10px">${esc(r.x)}</p>${Object.entries(r.s||{}).map(([k,v])=>`<span class="stat"><b>${esc(v)}</b>${esc(k)}</span>`).join("")}
+   <div class="acts"><button class="btn btn-o btn-s" onclick="shareReport('${id}')">Share</button><a class="btn btn-g btn-s" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(reportUrl(id))}">Facebook</a><a class="btn btn-g btn-s" href="#book">See next trips</a></div></div></article>`}).join("")||'<p class="note">No reports yet.</p>';
+  if(focus){const el=document.getElementById("r-"+focus);if(el)setTimeout(()=>el.scrollIntoView({block:"start",behavior:"smooth"}),50)}
 }
+const reportUrl=id=>location.origin+location.pathname+"#reports/"+id;
+async function shareReport(id){const r=REPORTS.find(x=>rid(x)===id);if(!r)return;const url=reportUrl(id);
+  if(navigator.share){try{await navigator.share({title:r.t,text:r.t+" · Big Jamaica fishing report",url})}catch(e){}return}
+  try{await navigator.clipboard.writeText(url);toast("Link copied. Paste it anywhere.")}catch(e){prompt("Copy this link:",url)}
+}
+// ---------- STATUS BAR ----------
+function renderStatus(){
+  const el=$("#statusBar"),s=STATUS,today=todayISO(),stale=!s||(s.d&&s.d<today);
+  const L={go:["st-go","Sailing today"],watch:["st-watch","Watching the weather"],cancelled:["st-cancelled","Today's trip is cancelled"]};
+  if(stale||!L[s.level]){el.className="st st-none";el.innerHTML=`<span>Today's sailing status isn't posted yet.</span><a href="tel:7325285014">Call (732) 528-5014</a>`;return}
+  el.className="st "+L[s.level][0];
+  el.innerHTML=`<span class="dot"></span><b>${L[s.level][1]}</b>${s.text?`<span>${esc(s.text)}</span>`:''}${s.at?`<small>Updated ${esc(s.at)}</small>`:''}${s.level!=="go"?`<a href="tel:7325285014">Call the office</a>`:''}`;
+}
+// ---------- NOAA MARINE FORECAST ----------
+const WX_ZONE="ANZ450"; let WX={};
+function wxParse(text){const w=/\b([NSEW]{1,3})\s+winds?\s+(?:around\s+)?(\d+)(?:\s+to\s+(\d+))?\s*kt/i.exec(text),g=/gusts\s+(?:up\s+)?to\s+(\d+)/i.exec(text),se=/seas\s+(?:around\s+)?(\d+)(?:\s+to\s+(\d+))?\s*(?:ft|feet|foot)(\s+or\s+less)?/i.exec(text);
+  if(!w&&!se)return null;
+  const wMax=w?+(w[3]||w[2]):0,sMax=se?+(se[2]||se[1]):0,gMax=g?+g[1]:0;
+  return {wind:w?`${w[1].toUpperCase()} ${w[2]}${w[3]?"–"+w[3]:""} kt`:"",gust:g?`gusts ${g[1]}`:"",seas:se?`${se[3]?"under ":""}${se[1]}${se[2]?"–"+se[2]:""} ft`:"",
+    lvl:(sMax>=6||wMax>=25||gMax>=30)?"rough":(sMax>=4||wMax>=18||gMax>=25)?"mod":"good",adv:/small craft advisory|gale warning|storm warning/i.exec(text)?.[0]||""}}
+function wxBuild(periods){const days=["sun","mon","tue","wed","thu","fri","sat"],out={};let cur=new Date();cur.setHours(12,0,0,0);
+  const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+  for(const p of periods||[]){const name=String(p.name||"").toLowerCase(),night=/night|overnight/.test(name),f=wxParse(p.detailedForecast||"");
+    const found=name.split(/[^a-z]+/).map(w=>days.indexOf(w.slice(0,3))).filter((x,i,arr)=>x>=0);
+    let dates=[];
+    if(!found.length)dates=[new Date(cur)];
+    else{const first=new Date(cur);while(first.getDay()!==found[0])first.setDate(first.getDate()+1);dates=[first];
+      if(found.length>1&&/through|and/.test(name)){const last=new Date(first);let n=0;while(last.getDay()!==found[found.length-1]&&n++<7)last.setDate(last.getDate()+1);
+        for(let d=new Date(first);d<last;){d=new Date(d);d.setDate(d.getDate()+1);dates.push(new Date(d))}}
+      cur=new Date(dates[dates.length-1])}
+    if(!f)continue;
+    for(const d of dates){const k=iso(d);out[k]=out[k]||{};if(night){out[k].night=out[k].night||f}else out[k].day=out[k].day||f;out[k].label=out[k].label||d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}}
+  return out}
+const wxFor=d=>WX[d]&&(WX[d].day||WX[d].night);
+function wxLine(d){const f=wxFor(d);if(!f)return"";return `<div class="wxl ${f.lvl}" title="NOAA coastal waters forecast"><i></i>${f.wind?`Wind ${f.wind}`:''}${f.gust?`, ${f.gust}`:''}${f.seas?` · Seas ${f.seas}`:''}${f.adv?` · <b>${esc(f.adv)}</b>`:''}</div>`}
+function renderWx(){const keys=Object.keys(WX).sort().slice(0,5);if(!keys.length){$("#wxSec").classList.add("hide");return}
+  $("#wxSec").classList.remove("hide");
+  $("#wx").innerHTML=keys.map(k=>{const f=wxFor(k);return `<div class="wxc ${f.lvl}"><h4>${WX[k].label}</h4><div class="big">${f.seas?"Seas "+f.seas:"Seas n/a"}</div><div class="sub">${f.wind?"Wind "+f.wind:""}${f.gust?", "+f.gust:""}</div>${f.adv?`<div class="sub" style="color:#c62828;font-weight:700">${esc(f.adv)}</div>`:''}${!WX[k].day&&WX[k].night?'<div class="sub">night</div>':''}</div>`}).join("")}
+async function loadWx(){
+  try{const c=JSON.parse(sessionStorage.getItem("bj_wx")||"null");if(c&&Date.now()-c.t<30*60e3){WX=wxBuild(c.p);return afterWx()}}catch(e){}
+  try{const r=await fetch(`https://api.weather.gov/zones/forecast/${WX_ZONE}/forecast`,{headers:{accept:"application/geo+json"}});if(!r.ok)return;
+    const j=await r.json(),p=(j.properties&&j.properties.periods)||j.periods||[];WX=wxBuild(p);try{sessionStorage.setItem("bj_wx",JSON.stringify({t:Date.now(),p}))}catch(e){}afterWx()}catch(e){}
+}
+function afterWx(){renderWx();renderHome();const p=(location.hash.slice(1)||"home").split("/")[0];if(p==="book")renderBook()}
+// ---------- MODALS: reserve step, waiting list (mock-ups) ----------
+const SMS_LEGAL="I agree to get automated text messages from Big Jamaica at this number about my trips. Message frequency varies. Message and data rates may apply. Reply STOP to cancel, HELP for help. Consent is not a condition of purchase.";
+function openModal(html){$("#modalBody").innerHTML=html;$("#modal").classList.remove("hide");document.body.style.overflow="hidden";const f=$("#modalBody input,#modalBody button");if(f)f.focus()}
+function closeModal(){$("#modal").classList.add("hide");document.body.style.overflow=""}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+function toast(m){const t=$("#tst");t.textContent=m;t.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("on"),2600)}
+const sailTitle=s=>{const t=byId(s.t);return `<b>${t.name}</b><div class="note">${dt(s.d).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})} · ${s.time||t.time}</div>`};
+function reserveStep(i){const s=SAILINGS[i],t=byId(s.t);
+  openModal(`<h3 style="margin-right:40px">Before you reserve</h3>${sailTitle(s)}${wxLine(s.d)}
+   <div class="card" style="margin:14px 0;padding:14px"><span class="demo">Demo: number is not saved</span>
+   <label class="f" for="rsPhone">Mobile number (optional)</label><input id="rsPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(555) 555-0100">
+   <label class="consent"><input type="checkbox" id="rsOk"> <span><b style="color:var(--ink)">Text me if this trip is cancelled or the time changes.</b><br>${SMS_LEGAL}</span></label></div>
+   <a class="btn btn-o" style="width:100%" href="${bookHref(t)}" target="_blank" rel="noopener" onclick="closeModal()">Continue to secure reservation ↗</a>
+   <p class="note" style="margin:10px 0 0">You'll pick tickets, rods and bunks and pay on our reservation system. No refunds unless the captain cancels.</p>`)}
+function waitlist(i){const s=SAILINGS[i];
+  openModal(`<h3 style="margin-right:40px">Join the waiting list</h3>${sailTitle(s)}<p class="note">This trip is full. If a seat frees up we text the list in order. First to reply gets it.</p>
+   <span class="demo">Demo: not live yet</span>
+   <form onsubmit="event.preventDefault();demoDone(this,'Waiting list')">
+   <label class="f" for="wlName">Name</label><input id="wlName" autocomplete="name" required>
+   <div class="row2"><div><label class="f" for="wlPhone">Mobile number</label><input id="wlPhone" type="tel" inputmode="tel" autocomplete="tel" required pattern="[0-9()+ .-]{10,}"></div><div><label class="f" for="wlN">Seats needed</label><select id="wlN"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div></div>
+   <label class="consent"><input type="checkbox" required> <span>${SMS_LEGAL}</span></label>
+   <button class="btn btn-o" style="width:100%;margin-top:14px">Add me to the list</button></form>`)}
+function demoDone(form,what){form.outerHTML=`<div class="alert" style="margin-top:12px"><b>${what}: this is a demo.</b> Nothing was saved and no text will be sent. The real service isn't connected yet. For now call <a href="tel:7325285014">(732) 528-5014</a>.</div>`}
 // ---------- CHARTERS ----------
 function renderCharters(){
   $("#chTable").innerHTML=`<tr><th>Charter</th><th>When</th><th>Base price</th><th>Includes up to</th><th>Each extra</th></tr>`+CHARTERS.map(c=>`<tr><td><b>${c[0]}</b></td><td data-l="When">${c[1]}</td><td data-l="Base price">${fmt(c[2])}</td><td data-l="Includes up to">${c[3]} people</td><td data-l="Each extra">${fmt(c[4])}</td></tr>`).join("");
@@ -665,12 +812,13 @@ function route(){
   document.querySelectorAll("nav.main a").forEach(x=>x.classList.toggle("on",x.getAttribute("href")==="#"+p));
   document.querySelector("nav.main").classList.remove("open");
   if(p==="trips")renderTrips(); if(p==="trip")renderTrip(a); if(p==="book")renderBook(a||"all"); if(p==="gallery")renderGallery();
-  if(p==="reports")renderReports(); if(p==="charters")renderCharters(); if(p==="gift")renderGift();
+  if(p==="reports")renderReports(a); if(p==="charters")renderCharters(); if(p==="gift")renderGift();
   window.scrollTo(0,0);
 }
-renderHome(); window.onhashchange=route; route();
+document.querySelectorAll(".smsLegal").forEach(e=>e.textContent=SMS_LEGAL);
+renderStatus(); renderHome(); window.onhashchange=route; route(); loadWx();
 // Published content (what the admin page saves on the hosted site)
-fetch("content.json",{cache:"no-cache"}).then(r=>r.ok?r.json():null).then(c=>{if(!c)return;applyContent(c);localOverride();renderHome();route()}).catch(()=>{});
+fetch("content.json",{cache:"no-cache"}).then(r=>r.ok?r.json():null).then(c=>{if(!c)return;applyContent(c);localOverride();renderStatus();renderHome();route()}).catch(()=>{});
 </script>
 </body>
 </html>

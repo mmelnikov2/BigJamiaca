@@ -1,4 +1,8 @@
 {
+ "status": {
+  "level": "go",
+  "text": "All trips sailing as scheduled."
+ },
  "trips": [
   {
    "id": "pm-seabass",
@@ -380,7 +384,8 @@
   {
    "t": "overnight-sb",
    "d": "2026-11-21",
-   "left": 3
+   "left": 0,
+   "status": "soldout"
   },
   {
    "t": "thanks",

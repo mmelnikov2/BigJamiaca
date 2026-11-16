@@ -1,5 +1,7 @@
 // ---------- DATA (from current site, Nov 2026) ----------
 window.DEFAULT_CONTENT={};
+// Today's sailing status (set from the admin page). level: go | watch | cancelled
+DEFAULT_CONTENT.status={level:"go",text:"All trips sailing as scheduled."};
 DEFAULT_CONTENT.trips=[
  {id:"pm-seabass",name:"Afternoon Sea Bass",cat:"day",hrs:5,time:"4:00 pm – 9:00 pm",season:"May–Jun, Fri–Sun",species:["Sea bass"],prices:{Adult:75,Senior:70,Military:70,"Child (12 & under)":50},rod:10,bunk:0,c:["#1f6f8b","#0b2340"],note:"4-ticket deal: $280 incl. 4 rental rods. Limit 10 sea bass."},
  {id:"daily",name:"Daily Bluefish & Mixed Bag",cat:"day",hrs:7,time:"7:30 am – 2:30 pm",season:"Jun–Sep, daily",species:["Bluefish","Bonito","Fluke","Sea bass"],prices:{Adult:95,Senior:85,Military:90,"Child (under 13)":60},rod:10,bunk:0,c:["#2a8fa8","#12345c"],note:"Groups of 4+ adults: $85 each."},
@@ -19,7 +21,7 @@ DEFAULT_CONTENT.trips=[
 ];
 DEFAULT_CONTENT.sailings=[ // demo calendar (admin edits this)
  {t:"midrange",d:"2026-11-16",left:6},{t:"midrange",d:"2026-11-19",left:14},{t:"overnight-sb",d:"2026-11-17",left:22},
- {t:"overnight-sb",d:"2026-11-19",left:9},{t:"overnight-sb",d:"2026-11-20",left:31},{t:"overnight-sb",d:"2026-11-21",left:3},
+ {t:"overnight-sb",d:"2026-11-19",left:9},{t:"overnight-sb",d:"2026-11-20",left:31},{t:"overnight-sb",d:"2026-11-21",left:0,status:"soldout"},
  {t:"thanks",d:"2026-11-26",left:40},{t:"marathon",d:"2026-11-22",left:18},{t:"marathon",d:"2026-11-29",left:35}
 ];
 // Demo: fill future months so the calendar has something to show (replace with real schedule)
