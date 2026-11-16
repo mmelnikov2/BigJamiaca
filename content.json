@@ -1,9 +1,9 @@
 {
  "status": {
-  "level": "go",
+  "level": "watch",
   "text": "",
-  "d": "2026-11-15",
-  "at": "11:22 PM"
+  "d": "2026-11-16",
+  "at": "4:31 PM"
  },
  "trips": [
   {
@@ -361,7 +361,8 @@
   {
    "t": "midrange",
    "d": "2026-11-16",
-   "left": 7
+   "left": 7,
+   "status": "open"
   },
   {
    "t": "midrange",
